@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pathOS // Mechanical Blueprints</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+         :root {
+            --bg-dark: #09090b;
+            --accent-green: #00ff66;
+            --text-main: #ffffff;
+            --text-muted: #a1a1aa;
+            --surface: #18181b;
+            --surface-light: #27272a;
+            --border-line: rgba(255, 255, 255, 0.08);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 60px;
+            z-index: 100;
+            background: linear-gradient(to bottom, var(--bg-dark) 80%, transparent);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-line);
+        }
+        
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--text-main);
+            letter-spacing: -1px;
+        }
+        
+        .back-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .back-link:hover {
+            color: #fff;
+        }
+        
+        main {
+            padding: 140px 60px 60px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .title-block {
+            margin-bottom: 40px;
+        }
+        
+        .title-block h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.8rem;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+        
+        .title-block p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+        
+        .sub-tabs {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        
+        .sub-btn {
+            padding: 12px 24px;
+            background: var(--surface);
+            border: 1px solid var(--border-line);
+            color: var(--text-muted);
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .sub-btn:hover {
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .sub-btn.active {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+        }
+        
+        .roles-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        
+        .role-card {
+            background: var(--surface);
+            border: 1px solid var(--border-line);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+        
+        .role-card:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .role-header {
+            padding: 32px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .role-info h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.6rem;
+            margin-bottom: 8px;
+        }
+        
+        .role-info p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: 12px;
+            max-width: 700px;
+        }
+        
+        .salary-tag {
+            display: inline-block;
+            padding: 6px 14px;
+            background: rgba(0, 255, 102, 0.1);
+            color: var(--accent-green);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .toggle-icon {
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+            font-family: monospace;
+            color: var(--text-muted);
+        }
+        
+        .role-blueprint {
+            max-height: 0;
+            overflow: hidden;
+            background: var(--surface-light);
+            transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .role-card.active .role-blueprint {
+            max-height: 2000px;
+            border-top: 1px solid var(--border-line);
+        }
+        
+        .role-card.active .toggle-icon {
+            transform: rotate(45deg);
+            color: var(--accent-green);
+        }
+        
+        .blueprint-content {
+            padding: 40px;
+        }
+        
+        .timeline {
+            border-left: 2px solid var(--border-line);
+            margin-left: 20px;
+            padding-left: 40px;
+            position: relative;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+        }
+        
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .timeline-item::before {
+            content: attr(data-level);
+            position: absolute;
+            left: -57px;
+            top: 0;
+            width: 32px;
+            height: 32px;
+            background: var(--surface-light);
+            border: 2px solid var(--text-muted);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-family: 'Syne', sans-serif;
+            transition: all 0.3s;
+        }
+        
+        .role-card.active .timeline-item::before {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+        
+        .timeline-item h4 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        
+        .timeline-item p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        
+        .boss-level {
+            background: rgba(0, 255, 102, 0.05);
+            border: 1px solid rgba(0, 255, 102, 0.2);
+            border-radius: 16px;
+            padding: 30px;
+            margin-top: 40px;
+            position: relative;
+        }
+        
+        .boss-level h5 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.1rem;
+            color: var(--accent-green);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .boss-level strong {
+            display: block;
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        
+        .boss-level p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        
+        @media(max-width: 768px) {
+            header,
+            main {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+            .role-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            .timeline {
+                margin-left: 10px;
+                padding-left: 30px;
+            }
+            .timeline-item::before {
+                left: -47px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <a href="index.html" class="logo">pathOS.</a>
+        <a href="index.html" class="back-link">&larr; Back to Map</a>
+    </header>
+
+    <main>
+        <div class="title-block">
+            <h1>Mechanical Pathways</h1>
+            <p>Modern engineering isn't just wrenches and gears. It is code, simulation, and robotics. Pick a path to see the modern roadmap.</p>
+        </div>
+
+        <div class="sub-tabs">
+            <button class="sub-btn active" onclick="loadRoles('robotics', this)">Robotics / Mechatronics</button>
+            <button class="sub-btn" onclick="loadRoles('fea', this)">Simulation & Analysis</button>
+            <button class="sub-btn" onclick="loadRoles('auto', this)">EV / Automotive</button>
+        </div>
+
+        <div class="roles-container" id="roles-wrapper"></div>
+    </main>
+
+    <script>
+        const mechBlueprints = {
+            robotics: [{
+                title: "Robotics Control Engineer",
+                desc: "You are the brain of the machine. You write the logic that tells mechanical arms how to move and sensors how to see the world.",
+                pay: "₹9L - ₹20L / Year",
+                levels: [{
+                    level: "1",
+                    title: "The Brains (Microcontrollers)",
+                    desc: "Start simple. Buy an Arduino or Raspberry Pi. Learn how to make a motor spin and a sensor read data using basic C++."
+                }, {
+                    level: "2",
+                    title: "The Math (Kinematics)",
+                    desc: "Learn how joints move. If a robot arm needs to grab a cup, what angle should the shoulder and elbow be at? That is Inverse Kinematics."
+                }, {
+                    level: "3",
+                    title: "The Nerves (ROS)",
+                    desc: "ROS (Robot Operating System) is the industry standard. It helps sensors, cameras, and motors all talk to each other seamlessly."
+                }, {
+                    level: "4",
+                    title: "The Vision (OpenCV)",
+                    desc: "A robot is blind without code. Learn OpenCV using Python to teach your robot how to recognize objects and avoid walls."
+                }],
+                boss: {
+                    title: "The Final Boss: Autonomous Navigation Rover",
+                    desc: "Build a 3D simulation of a rover in Gazebo. Write the ROS code to make it navigate a maze autonomously using simulated laser sensors (LiDAR) without hitting the walls."
+                }
+            }],
+            fea: [{
+                title: "Simulation & FEA Architect",
+                desc: "You predict failures before they happen. You use physics software to simulate heat, wind, and stress on parts before they are ever manufactured.",
+                pay: "₹8L - ₹18L / Year",
+                levels: [{
+                    level: "1",
+                    title: "The Shape (3D CAD)",
+                    desc: "Master SolidWorks or CATIA. You need to know how to build a perfect, mathematically correct 3D model of a part."
+                }, {
+                    level: "2",
+                    title: "The Physics (Statics/Dynamics)",
+                    desc: "Brush up on your core physics. Understand how forces bend metal and how heat travels through materials."
+                }, {
+                    level: "3",
+                    title: "The Matrix (Meshing)",
+                    desc: "Learn how to break a 3D part into thousands of tiny triangles (a mesh) so the computer can run math on every single point."
+                }, {
+                    level: "4",
+                    title: "The Software (ANSYS)",
+                    desc: "ANSYS is the industry standard. Apply digital weight and heat to your mesh to see exactly where the part will snap or melt."
+                }],
+                boss: {
+                    title: "The Final Boss: Weight Reduction Optimization",
+                    desc: "Design a suspension bracket in SolidWorks. Import it to ANSYS, apply realistic car forces, and iteratively change the design to make it 20% lighter without breaking."
+                }
+            }],
+            auto: [{
+                title: "EV Battery Systems Engineer",
+                desc: "The heart of an electric car is the battery. You design the logic boards that keep the battery from overheating and maximize its range.",
+                pay: "₹10L - ₹22L / Year",
+                levels: [{
+                    level: "1",
+                    title: "The Chemistry",
+                    desc: "Understand Lithium-ion cells. Learn why they get hot, how they degrade, and how voltage drops over time."
+                }, {
+                    level: "2",
+                    title: "The Code (Embedded C)",
+                    desc: "Learn how to write highly reliable, fast C code that runs directly on chips to monitor battery temperatures instantly."
+                }, {
+                    level: "3",
+                    title: "The Network (CAN Bus)",
+                    desc: "Cars have an internal internet called CAN Bus. Learn how the battery sends messages to the dashboard and the motor."
+                }, {
+                    level: "4",
+                    title: "The Model (Simulink)",
+                    desc: "Before writing code for a real car, engineers build block diagrams in MATLAB/Simulink to simulate how the battery will behave on a highway."
+                }],
+                boss: {
+                    title: "The Final Boss: Battery Charge Estimator",
+                    desc: "Build a software model in MATLAB/Simulink that reads simulated voltage and temperature drops to accurately guess the 'Percentage Remaining' of a battery pack."
+                }
+            }]
+        };
+
+        function toggleRole(element) {
+            const card = element.parentElement;
+            document.querySelectorAll('.role-card').forEach(c => {
+                if (c !== card) c.classList.remove('active');
+            });
+            card.classList.toggle('active');
+        }
+
+        function loadRoles(key, btn) {
+            document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const wrapper = document.getElementById('roles-wrapper');
+            const data = mechBlueprints[key];
+
+            let html = "";
+            data.forEach(role => {
+                let levelsHtml = role.levels.map(l => `
+                    <div class="timeline-item" data-level="${l.level}">
+                        <h4>${l.title}</h4>
+                        <p>${l.desc}</p>
+                    </div>
+                `).join('');
+
+                html += `
+                    <div class="role-card">
+                        <div class="role-header" onclick="toggleRole(this)">
+                            <div class="role-info">
+                                <h3>${role.title}</h3>
+                                <p>${role.desc}</p>
+                                <span class="salary-tag">${role.pay}</span>
+                            </div>
+                            <span class="toggle-icon">+</span>
+                        </div>
+                        <div class="role-blueprint">
+                            <div class="blueprint-content">
+                                <div class="timeline">
+                                    ${levelsHtml}
+                                </div>
+                                <div class="boss-level">
+                                    <h5>⚙️ The Final Boss Project</h5>
+                                    <strong>${role.boss.title}</strong>
+                                    <p>${role.boss.desc}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            wrapper.innerHTML = html;
+        }
+
+        window.onload = () => loadRoles('robotics', document.querySelector('.sub-btn'));
+    </script>
+</body>
+
+</html>

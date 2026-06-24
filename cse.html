@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pathOS // CSE Blueprints</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+         :root {
+            --bg-dark: #09090b;
+            --accent-green: #00ff66;
+            --text-main: #ffffff;
+            --text-muted: #a1a1aa;
+            --surface: #18181b;
+            --surface-light: #27272a;
+            --border-line: rgba(255, 255, 255, 0.08);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 60px;
+            z-index: 100;
+            background: linear-gradient(to bottom, var(--bg-dark) 80%, transparent);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-line);
+        }
+        
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--text-main);
+            letter-spacing: -1px;
+        }
+        
+        .back-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .back-link:hover {
+            color: #fff;
+        }
+        
+        main {
+            padding: 140px 60px 60px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .title-block {
+            margin-bottom: 40px;
+        }
+        
+        .title-block h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.8rem;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+        
+        .title-block p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+        /* --- FILTER TABS --- */
+        
+        .sub-tabs {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        
+        .sub-btn {
+            padding: 12px 24px;
+            background: var(--surface);
+            border: 1px solid var(--border-line);
+            color: var(--text-muted);
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .sub-btn:hover {
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .sub-btn.active {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+        }
+        /* --- ROLE CARDS --- */
+        
+        .roles-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        
+        .role-card {
+            background: var(--surface);
+            border: 1px solid var(--border-line);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+        
+        .role-card:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .role-header {
+            padding: 32px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .role-info h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.6rem;
+            margin-bottom: 8px;
+        }
+        
+        .role-info p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: 12px;
+            max-width: 700px;
+        }
+        
+        .salary-tag {
+            display: inline-block;
+            padding: 6px 14px;
+            background: rgba(0, 255, 102, 0.1);
+            color: var(--accent-green);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .toggle-icon {
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+            font-family: monospace;
+            color: var(--text-muted);
+        }
+        /* --- GAMIFIED TIMELINE ROADMAP --- */
+        
+        .role-blueprint {
+            max-height: 0;
+            overflow: hidden;
+            background: var(--surface-light);
+            transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .role-card.active .role-blueprint {
+            max-height: 2000px;
+            border-top: 1px solid var(--border-line);
+        }
+        
+        .role-card.active .toggle-icon {
+            transform: rotate(45deg);
+            color: var(--accent-green);
+        }
+        
+        .blueprint-content {
+            padding: 40px;
+        }
+        
+        .timeline {
+            border-left: 2px solid var(--border-line);
+            margin-left: 20px;
+            padding-left: 40px;
+            position: relative;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+        }
+        
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+        /* Level Number Circles */
+        
+        .timeline-item::before {
+            content: attr(data-level);
+            position: absolute;
+            left: -57px;
+            top: 0;
+            width: 32px;
+            height: 32px;
+            background: var(--surface-light);
+            border: 2px solid var(--text-muted);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-family: 'Syne', sans-serif;
+            transition: all 0.3s;
+        }
+        
+        .role-card.active .timeline-item::before {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+        
+        .timeline-item h4 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        
+        .timeline-item p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        /* Final Boss Section */
+        
+        .boss-level {
+            background: rgba(0, 255, 102, 0.05);
+            border: 1px solid rgba(0, 255, 102, 0.2);
+            border-radius: 16px;
+            padding: 30px;
+            margin-top: 40px;
+            position: relative;
+        }
+        
+        .boss-level h5 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.1rem;
+            color: var(--accent-green);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .boss-level strong {
+            display: block;
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        
+        .boss-level p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        
+        @media(max-width: 768px) {
+            header,
+            main {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+            .role-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            .timeline {
+                margin-left: 10px;
+                padding-left: 30px;
+            }
+            .timeline-item::before {
+                left: -47px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <a href="index.html" class="logo">pathOS.</a>
+        <a href="index.html" class="back-link">&larr; Back to Map</a>
+    </header>
+
+    <main>
+        <div class="title-block">
+            <h1>Computer Science Pathways</h1>
+            <p>Pick a sub-branch. Open the card to see a simplified, step-by-step roadmap to go from a beginner to industry-ready.</p>
+        </div>
+
+        <div class="sub-tabs">
+            <button class="sub-btn active" onclick="loadRoles('aiml', this)">AI & Machine Learning</button>
+            <button class="sub-btn" onclick="loadRoles('data', this)">Data Science</button>
+            <button class="sub-btn" onclick="loadRoles('cyber', this)">Cyber Security</button>
+            <button class="sub-btn" onclick="loadRoles('web', this)">Full-Stack / Web</button>
+        </div>
+
+        <div class="roles-container" id="roles-wrapper"></div>
+    </main>
+
+    <script>
+        const cseBlueprints = {
+            aiml: [{
+                title: "Machine Learning Engineer",
+                desc: "Don't just use AI—build it. You will teach computers to recognize patterns, understand text, and make decisions without being explicitly programmed.",
+                pay: "₹12L - ₹28L / Year",
+                levels: [{
+                    level: "1",
+                    title: "Learn the Language (Python)",
+                    desc: "Python is the undisputed king of AI. Ignore everything else. Learn loops, functions, and object-oriented basics."
+                }, {
+                    level: "2",
+                    title: "Data Manipulation (Pandas & NumPy)",
+                    desc: "AI needs data. Learn how to clean messy data, filter it, and do math on massive tables using Pandas."
+                }, {
+                    level: "3",
+                    title: "The Brains (Scikit-Learn)",
+                    desc: "Start with classic Machine Learning. Learn how to predict housing prices or classify spam emails using simple, pre-built algorithms."
+                }, {
+                    level: "4",
+                    title: "Deep Learning (PyTorch)",
+                    desc: "This is where the magic happens. Build artificial neural networks that can recognize images or process human speech."
+                }],
+                boss: {
+                    title: "The Final Boss: Intelligent Recommendation Engine",
+                    desc: "Build an API that takes a user's Spotify history and predicts exactly what song they want to hear next. Host it live on the internet so anyone can test it."
+                }
+            }],
+            data: [{
+                title: "Data Engineer",
+                desc: "Data Scientists can't work if they don't have data. You are the plumber of the internet, building massive pipes that move millions of data points instantly.",
+                pay: "₹10L - ₹26L / Year",
+                levels: [{
+                    level: "1",
+                    title: "The Foundation (SQL)",
+                    desc: "Master SQL. It is the most important skill you will ever learn. Understand how to join massive tables and write fast queries."
+                }, {
+                    level: "2",
+                    title: "The Scripting (Python)",
+                    desc: "Learn Python to automate tasks. You will use it to pull data from websites and APIs automatically."
+                }, {
+                    level: "3",
+                    title: "The Pipes (Apache Kafka & Spark)",
+                    desc: "Learn how companies process millions of clicks per second. Understand event streaming and big data processing."
+                }, {
+                    level: "4",
+                    title: "The Warehouse (Cloud)",
+                    desc: "Learn how to store all this data safely on AWS (Amazon) or GCP (Google) using tools like Snowflake or BigQuery."
+                }],
+                boss: {
+                    title: "The Final Boss: Live Stock Market Tracker",
+                    desc: "Write a script that pulls live stock prices every second, streams them through Kafka, and saves them into a cloud database without crashing."
+                }
+            }],
+            cyber: [{
+                title: "Cyber Security Analyst / Ethical Hacker",
+                desc: "You are the digital shield. You will actively try to hack into your own company's systems to fix the holes before the bad guys find them.",
+                pay: "₹9L - ₹22L / Year",
+                levels: [{
+                    level: "1",
+                    title: "How Computers Talk (Networking)",
+                    desc: "You can't hack a network if you don't know how it works. Master IP addresses, DNS, and the OSI model."
+                }, {
+                    level: "2",
+                    title: "The Operating System (Linux)",
+                    desc: "Hackers don't use Windows. Master the Linux command line. Learn how to navigate files and control permissions using only text."
+                }, {
+                    level: "3",
+                    title: "The Weaknesses (OWASP Top 10)",
+                    desc: "Learn the 10 most common ways websites get hacked (like SQL Injection and Cross-Site Scripting)."
+                }, {
+                    level: "4",
+                    title: "The Tools (Burp Suite & Nmap)",
+                    desc: "Learn how to scan networks for open doors and intercept website traffic to find hidden vulnerabilities."
+                }],
+                boss: {
+                    title: "The Final Boss: Automated Threat Scanner",
+                    desc: "Write a Python tool that takes a website URL, automatically scans it for open ports and outdated software, and generates a PDF security report."
+                }
+            }],
+            web: [{
+                title: "Full-Stack Web Developer",
+                desc: "You build both the beautiful interface users click on, and the hidden servers that store their data securely.",
+                pay: "₹7L - ₹20L / Year",
+                levels: [{
+                    level: "1",
+                    title: "The Face (HTML/CSS & React)",
+                    desc: "Learn how to make things look good on a screen. Master React.js, the framework used by Facebook and Netflix."
+                }, {
+                    level: "2",
+                    title: "The Logic (JavaScript/Node.js)",
+                    desc: "JavaScript makes websites interactive. Learn Node.js so you can write server code using the exact same language."
+                }, {
+                    level: "3",
+                    title: "The Memory (Databases)",
+                    desc: "Learn how to save user accounts and passwords safely. Understand MongoDB (NoSQL) or PostgreSQL (SQL)."
+                }, {
+                    level: "4",
+                    title: "The Bridge (APIs)",
+                    desc: "Learn how to make the front-end (React) talk to the back-end (Database) using REST APIs."
+                }],
+                boss: {
+                    title: "The Final Boss: A Clone of Twitter",
+                    desc: "Build a fully functioning social network where users can log in securely, post tweets, follow others, and see a live feed. Deploy it to the internet."
+                }
+            }]
+        };
+
+        function toggleRole(element) {
+            const card = element.parentElement;
+            // Close others
+            document.querySelectorAll('.role-card').forEach(c => {
+                if (c !== card) c.classList.remove('active');
+            });
+            card.classList.toggle('active');
+        }
+
+        function loadRoles(key, btn) {
+            document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const wrapper = document.getElementById('roles-wrapper');
+            const data = cseBlueprints[key];
+
+            let html = "";
+            data.forEach(role => {
+                let levelsHtml = role.levels.map(l => `
+                    <div class="timeline-item" data-level="${l.level}">
+                        <h4>${l.title}</h4>
+                        <p>${l.desc}</p>
+                    </div>
+                `).join('');
+
+                html += `
+                    <div class="role-card">
+                        <div class="role-header" onclick="toggleRole(this)">
+                            <div class="role-info">
+                                <h3>${role.title}</h3>
+                                <p>${role.desc}</p>
+                                <span class="salary-tag">${role.pay}</span>
+                            </div>
+                            <span class="toggle-icon">+</span>
+                        </div>
+                        <div class="role-blueprint">
+                            <div class="blueprint-content">
+                                <div class="timeline">
+                                    ${levelsHtml}
+                                </div>
+                                <div class="boss-level">
+                                    <h5>⚔️ The Final Boss Project</h5>
+                                    <strong>${role.boss.title}</strong>
+                                    <p>${role.boss.desc}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            wrapper.innerHTML = html;
+        }
+
+        window.onload = () => loadRoles('aiml', document.querySelector('.sub-btn'));
+    </script>
+</body>
+
+</html>

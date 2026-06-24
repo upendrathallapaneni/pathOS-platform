@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vecta // ECE Blueprints</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Core Shared Styles */
+        
+         :root {
+            --bg-dark: #09090b;
+            --accent-green: #00ff66;
+            --text-main: #ffffff;
+            --text-muted: #a1a1aa;
+            --surface: #18181b;
+            --surface-light: #27272a;
+            --border-line: rgba(255, 255, 255, 0.08);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 60px;
+            z-index: 100;
+            background: linear-gradient(to bottom, var(--bg-dark) 60%, transparent);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-line);
+        }
+        
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--text-main);
+            letter-spacing: -1px;
+        }
+        
+        .back-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .back-link:hover {
+            color: #fff;
+        }
+        
+        main {
+            padding: 140px 60px 60px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .title-block {
+            margin-bottom: 40px;
+        }
+        
+        .title-block h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.8rem;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+        
+        .title-block p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+        
+        .sub-tabs {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        
+        .sub-btn {
+            padding: 12px 24px;
+            background: var(--surface);
+            border: 1px solid var(--border-line);
+            color: var(--text-muted);
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .sub-btn:hover {
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .sub-btn.active {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+        }
+        
+        .roles-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .role-card {
+            background: var(--surface);
+            border: 1px solid var(--border-line);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+        
+        .role-card:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .role-header {
+            padding: 30px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .role-info h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+        
+        .role-info p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+        }
+        
+        .salary-tag {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent-green);
+        }
+        
+        .toggle-icon {
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+            font-family: monospace;
+        }
+        
+        .role-blueprint {
+            max-height: 0;
+            overflow: hidden;
+            background: var(--surface-light);
+            transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .role-card.active .role-blueprint {
+            max-height: 1000px;
+            border-top: 1px solid var(--border-line);
+        }
+        
+        .role-card.active .toggle-icon {
+            transform: rotate(45deg);
+            color: var(--accent-green);
+        }
+        
+        .blueprint-content {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        .bp-section h4 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.1rem;
+            color: var(--accent-green);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .bp-list {
+            list-style: none;
+        }
+        
+        .bp-list li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            color: #e4e4e7;
+        }
+        
+        .bp-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent-green);
+        }
+        
+        .proof-box {
+            background: rgba(0, 255, 102, 0.05);
+            border: 1px solid rgba(0, 255, 102, 0.2);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+        
+        .proof-box h5 {
+            color: var(--text-main);
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+        
+        .proof-box p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <a href="index.html" class="logo">vecta.</a>
+        <a href="index.html" class="back-link">&larr; Back to Map</a>
+    </header>
+
+    <main>
+        <div class="title-block">
+            <h1>Electronics & Communication</h1>
+            <p>Go beyond circuit diagrams. Discover how modern silicon is designed, how firmware controls hardware, and how IoT networks are architected.</p>
+        </div>
+
+        <div class="sub-tabs">
+            <button class="sub-btn active" onclick="loadRoles('vlsi', this)">VLSI & Chip Design</button>
+            <button class="sub-btn" onclick="loadRoles('embedded', this)">Embedded & IoT</button>
+            <button class="sub-btn" onclick="loadRoles('telecom', this)">5G & Telecom</button>
+        </div>
+
+        <div class="roles-container" id="roles-wrapper"></div>
+    </main>
+
+    <script>
+        const eceBlueprints = {
+            vlsi: [{
+                title: "ASIC / VLSI Design Engineer",
+                desc: "Designs the micro-architecture of silicon chips that power everything from smartphones to AI servers.",
+                pay: "₹10,00,000 - ₹25,00,000 / Year",
+                stack: ["Verilog / VHDL", "SystemVerilog (UVM)", "Cadence / Synopsys Tools", "Static Timing Analysis", "Python / Perl Scripting"],
+                steps: [
+                    "Master digital logic design beyond truth tables.",
+                    "Learn Verilog to describe hardware syntactically.",
+                    "Understand CMOS fabrication processes.",
+                    "Learn verification using SystemVerilog."
+                ],
+                proof: {
+                    name: "Custom 16-bit ALU Core",
+                    details: "Write the Verilog RTL for a 16-bit Arithmetic Logic Unit, create a comprehensive testbench to verify all edge cases, and synthesize the code using an FPGA toolchain."
+                }
+            }],
+            embedded: [{
+                title: "Embedded Firmware Engineer",
+                desc: "Writes the low-level software that runs directly on hardware microcontrollers without a standard operating system.",
+                pay: "₹8,00,000 - ₹22,00,000 / Year",
+                stack: ["Embedded C / C++", "ARM Cortex-M Architecture", "RTOS (FreeRTOS)", "SPI, I2C, UART Protocols", "Oscilloscopes & Logic Analyzers"],
+                steps: [
+                    "Master memory-safe C programming and pointers.",
+                    "Learn bare-metal programming on STM32 or ESP32.",
+                    "Understand real-time operating systems (task scheduling).",
+                    "Master hardware communication protocols."
+                ],
+                proof: {
+                    name: "RTOS Weather Node",
+                    details: "Build a custom IoT node using an ESP32 and FreeRTOS. Read temperature data via I2C, process it in an isolated task, and transmit it securely to an AWS IoT cloud dashboard via MQTT."
+                }
+            }],
+            telecom: [{
+                title: "Network Infrastructure Engineer",
+                desc: "Designs and optimizes the radio frequency (RF) and digital signal networks that make 5G and satellite internet possible.",
+                pay: "₹7,00,000 - ₹18,00,000 / Year",
+                stack: ["MATLAB / Simulink", "Software Defined Radio (SDR)", "RF Engineering", "Python (Network Automation)", "TCP/IP & OSI Models"],
+                steps: [
+                    "Master digital signal processing (DSP) math.",
+                    "Learn MATLAB to simulate signal degradation and noise.",
+                    "Understand SDR concepts and GNU Radio.",
+                    "Learn Python to automate network testing scripts."
+                ],
+                proof: {
+                    name: "Custom SDR FM Receiver",
+                    details: "Use a cheap RTL-SDR dongle and GNU Radio to build a software-based FM radio receiver, complete with custom digital filters to isolate and decode the audio signal."
+                }
+            }]
+        };
+
+        function toggleRole(element) {
+            element.parentElement.classList.toggle('active');
+        }
+
+        function loadRoles(key, btn) {
+            document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const wrapper = document.getElementById('roles-wrapper');
+            const data = eceBlueprints[key];
+
+            let html = data.map(role => `
+                <div class="role-card">
+                    <div class="role-header" onclick="toggleRole(this)">
+                        <div class="role-info">
+                            <h3>${role.title}</h3>
+                            <p>${role.desc}</p>
+                            <span class="salary-tag">${role.pay}</span>
+                        </div>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="role-blueprint">
+                        <div class="blueprint-content">
+                            <div class="bp-section">
+                                <h4>The Industry Tech Stack</h4>
+                                <ul class="bp-list">${role.stack.map(s => `<li>${s}</li>`).join('')}</ul>
+                            </div>
+                            <div class="bp-section">
+                                <h4>Execution Roadmap</h4>
+                                <ul class="bp-list">${role.steps.map(s => `<li>${s}</li>`).join('')}</ul>
+                                <div class="proof-box">
+                                    <h5>Portfolio Proof Requirement:</h5>
+                                    <strong>${role.proof.name}</strong>
+                                    <p>${role.proof.details}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            wrapper.innerHTML = html;
+        }
+        window.onload = () => loadRoles('vlsi', document.querySelector('.sub-btn'));
+    </script>
+</body>
+
+</html>

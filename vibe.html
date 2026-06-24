@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Horizon Terminal // Profile Sync</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+         :root {
+            --bg-dark: #050507;
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --accent-green: #00ff66;
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.55);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        #ambient-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            filter: blur(90px);
+            opacity: 0.35;
+            pointer-events: none;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 60px;
+            border-bottom: 1px solid var(--border-glass);
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(16px);
+            z-index: 10;
+        }
+        
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 800;
+            text-decoration: none;
+            color: #fff;
+        }
+        
+        .terminal-badge {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        /* --- STAGE 1: AUTHENTICATION PANELS --- */
+        
+        .auth-container {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            transition: all 0.5s ease;
+        }
+        
+        .login-panel {
+            background: rgba(255, 255, 255, 0.01);
+            backdrop-filter: blur(35px) saturate(180%);
+            -webkit-backdrop-filter: blur(35px) saturate(180%);
+            border: 1px solid var(--border-glass);
+            border-radius: 28px;
+            padding: 45px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.7);
+        }
+        
+        .login-panel h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+        
+        .login-panel p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-glass);
+            border-radius: 10px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group select option {
+            background: #0c0c10;
+            color: #fff;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--accent-neon);
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background: var(--accent-green);
+        }
+        /* --- STAGE 2: DYNAMIC CURRICULUM DISCOVERY TERMINAL --- */
+        
+        .dashboard-container {
+            display: none;
+            opacity: 0;
+            padding: 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            transition: opacity 0.5s ease;
+        }
+        
+        .welcome-header {
+            margin-bottom: 40px;
+        }
+        
+        .welcome-header h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.8rem;
+            margin-bottom: 8px;
+        }
+        
+        .profile-saved-toast {
+            display: inline-block;
+            padding: 6px 14px;
+            background: rgba(0, 255, 102, 0.1);
+            color: var(--accent-green);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+        
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+        
+        .course-card {
+            background: rgba(255, 255, 255, 0.01);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 260px;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .course-card h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+        
+        .course-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+        
+        .terminal-quote {
+            grid-column: 1 / -1;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 24px 32px;
+            border-radius: 12px;
+            border-left: 3px solid var(--accent-green);
+            font-style: italic;
+            color: var(--text-muted);
+            margin-top: 16px;
+            font-size: 0.95rem;
+        }
+        
+        .access-btn {
+            align-self: flex-start;
+            padding: 10px 24px;
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border: 1px solid var(--border-glass);
+            transition: all 0.3s;
+        }
+        
+        .course-card:hover .access-btn {
+            background: #fff;
+            color: #000;
+        }
+        
+        @media(max-width: 768px) {
+            header,
+            .dashboard-container {
+                padding: 24px;
+            }
+            .welcome-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="ambient-canvas"></canvas>
+
+    <header>
+        <a href="index.html" class="logo">happy.</a>
+        <span class="terminal-badge">Horizon Node</span>
+    </header>
+
+    <!-- Entry Config Gate -->
+    <div class="auth-container" id="auth-gate">
+        <div class="login-panel">
+            <h2>Sync Identity</h2>
+            <p>Sync your node metrics to access industry-readiness training tracks.</p>
+
+            <form id="profile-form">
+                <div class="form-group">
+                    <label>Identity Node Email</label>
+                    <input type="email" placeholder="name@domain.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Operational Focus Stream</label>
+                    <select id="career-select" required>
+                        <option value="cse">Computer Science / Data Science</option>
+                        <option value="ece">Electronics & Communication</option>
+                        <option value="eee">Electrical & Electronics</option>
+                        <option value="mech">Mechanical Frameworks</option>
+                        <option value="civil">Civil & Structural Planning</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn">Synchronize Target Profile</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Targeted Course Matrices Output Window -->
+    <div class="dashboard-container" id="dashboard-view">
+        <div class="welcome-header">
+            <span class="profile-saved-toast" id="saved-profile-label">Track Engaged</span>
+            <h1 id="dynamic-title">Custom Terminal Architecture</h1>
+        </div>
+
+        <div class="courses-grid" id="courses-wrapper">
+            <!-- Dynamic Injection Slot -->
+        </div>
+    </div>
+
+    <script>
+        const curriculaDatabase = {
+            "cse": {
+                title: "Data Infrastructure & Processing Tracks",
+                quote: "College courses cover simple isolated syntaxes. Real deployment requires processing live data streams continuously.",
+                modules: [{
+                    name: "Continuous Pipeline Management",
+                    desc: "Constructing persistent data-ingestion pathways to handle incoming real-time application database triggers safely."
+                }, {
+                    name: "Production Container Frameworks",
+                    desc: "Packaging computational execution units inside isolated software layers for fluid deployment and replication patterns."
+                }]
+            },
+            "ece": {
+                title: "Embedded Hardware Logic Arrays",
+                quote: "Basic wiring schemas belong to text guides. True hardware products run microcode optimized directly for low-latency feedback signals.",
+                modules: [{
+                    name: "Real-Time Operating Code Systems",
+                    desc: "Writing micro-level operations configured to run perfectly within strict resource and latency limitations."
+                }, {
+                    name: "Decentralized Micro-Network Routing",
+                    desc: "Configuring wireless mesh network relays to channel device logs safely to remote storage centers."
+                }]
+            },
+            "eee": {
+                title: "Smart Grid Power Infrastructure",
+                quote: "Static wiring layouts are handled automatically. Modern systems optimization utilizes real-time load distribution logic arrays.",
+                modules: [{
+                    name: "Automated Energy Load Controls",
+                    desc: "Programming smart tracking modules to balance dynamic consumer load loops efficiently across regional grids."
+                }, {
+                    name: "EV Current Throttling Logic",
+                    desc: "Engineering firmware logic patterns to adjust power delivery loops safely inside mechanical motor drivers."
+                }]
+            },
+            "mech": {
+                title: "Computational Kinetic Simulation",
+                quote: "Drafting blueprints is mechanical history. Modern mechanical engineering builds software automated mechanical systems.",
+                modules: [{
+                    name: "Kinetic Vector Feedback Architecture",
+                    desc: "Interfacing physical sensor readings directly with mechanical controller arrays using stable software paths."
+                }]
+            },
+            "civil": {
+                title: "Computational Civil Planning",
+                quote: "Drawing stationary CAD layouts is entry-level. Advanced structural design writes active parametric evaluation scripts.",
+                modules: [{
+                    name: "Parametric Stress Mapping Models",
+                    desc: "Compiling architectural structures through custom variables to evaluate load capacities under changing parameters."
+                }]
+            }
+        };
+
+        document.getElementById('profile-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const chosenKey = document.getElementById('career-select').value;
+            const targetData = curriculaDatabase[chosenKey];
+
+            document.getElementById('dynamic-title').innerText = targetData.title;
+            document.getElementById('saved-profile-label').innerText = `Profile Saved // ${chosenKey.toUpperCase()} Track Initialized`;
+
+            const wrapper = document.getElementById('courses-wrapper');
+            wrapper.innerHTML = "";
+
+            targetData.modules.forEach(mod => {
+                const block = document.createElement('div');
+                block.className = 'course-card';
+                block.innerHTML = `
+                    <div>
+                        <h3>${mod.name}</h3>
+                        <p>${mod.desc}</p>
+                    </div>
+                    <a href="#" class="access-btn">Open Staging Environment</a>
+                `;
+                wrapper.appendChild(block);
+            });
+
+            const quoteDiv = document.createElement('div');
+            quoteDiv.className = 'terminal-quote';
+            quoteDiv.innerText = `"${targetData.quote}"`;
+            wrapper.appendChild(quoteDiv);
+
+            const gate = document.getElementById('auth-gate');
+            const dashboard = document.getElementById('dashboard-view');
+            gate.style.opacity = '0';
+            setTimeout(() => {
+                gate.style.display = 'none';
+                dashboard.style.display = 'block';
+                setTimeout(() => {
+                    dashboard.style.opacity = '1';
+                }, 50);
+            }, 500);
+        });
+
+        // Background layer processor
+        const canvas = document.getElementById('ambient-canvas');
+        const ctx = canvas.getContext('2d');
+        let w = canvas.width = window.innerWidth;
+        let h = canvas.height = window.innerHeight;
+        let angle = 0;
+
+        function render() {
+            ctx.clearRect(0, 0, w, h);
+            let x1 = w / 2 + Math.cos(angle) * (w / 4);
+            let y1 = h / 2 + Math.sin(angle) * (h / 4);
+            let x2 = w / 2 + Math.cos(angle + Math.PI) * (w / 4);
+            let y2 = h / 2 + Math.sin(angle + Math.PI) * (h / 4);
+
+            let grad = ctx.createLinearGradient(x1, y1, x2, y2);
+            grad.addColorStop(0, '#00ff66');
+            grad.addColorStop(0.5, '#0048ff');
+            grad.addColorStop(1, '#ff0048');
+
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, w, h);
+            angle += 0.002;
+            requestAnimationFrame(render);
+        }
+        render();
+
+        window.addEventListener('resize', () => {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        });
+
+        // Deep linking synchronization hook from main portal
+        const urlParams = new URLSearchParams(window.location.search);
+        const externalParam = urlParams.get('focus');
+        if (externalParam && curriculaDatabase[externalParam]) {
+            document.getElementById('career-select').value = externalParam;
+        }
+    </script>
+</body>
+
+</html>

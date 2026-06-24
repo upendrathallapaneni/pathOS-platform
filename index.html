@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pathOS // Industry Alignment Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+         :root {
+            --bg-dark: #09090b;
+            --accent-green: #00ff66;
+            --text-main: #ffffff;
+            --text-muted: #a1a1aa;
+            --surface: #18181b;
+            --border-line: rgba(255, 255, 255, 0.08);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        /* --- PRELOADER STYLES --- */
+        
+        #preloader {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Syne', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+        }
+        
+        .scramble-letter {
+            display: inline-block;
+            transition: color 0.4s ease;
+            color: #333;
+        }
+        
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 60px;
+            z-index: 100;
+            background: linear-gradient(to bottom, var(--bg-dark) 60%, transparent);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-line);
+        }
+        
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--text-main);
+            letter-spacing: -1px;
+        }
+        
+        main {
+            padding: 140px 60px 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .hero {
+            padding: 40px 0;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+        
+        .hero h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.8rem;
+            line-height: 1.2;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+        }
+        
+        .stream-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+        
+        .stream-card {
+            background: var(--surface);
+            border: 1px solid var(--border-line);
+            border-radius: 20px;
+            padding: 40px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 240px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .stream-card:hover {
+            border-color: var(--accent-green);
+            transform: translateY(-4px);
+        }
+        
+        .stream-card h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+        }
+        
+        .stream-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+        }
+        
+        .arrow-link {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent-green);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .quote-banner {
+            padding: 40px;
+            border-left: 3px solid var(--accent-green);
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: 0 16px 16px 0;
+            margin-bottom: 60px;
+        }
+        
+        .quote-banner p {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.3rem;
+            font-style: italic;
+            color: #e4e4e7;
+        }
+        
+        footer {
+            padding: 30px 0;
+            border-top: 1px solid var(--border-line);
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        
+        @media(max-width: 768px) {
+            header,
+            main {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+            .hero h1 {
+                font-size: 2.1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="preloader">
+        <div id="scramble-container"></div>
+    </div>
+
+    <header>
+        <a href="index.html" class="logo">pathOS.</a>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Deconstruct your syllabus. Align with live tech teams.</h1>
+            <p>Your institutional curriculum centers on basic logic syntax. Pick your core industry domain below to unveil specialized sub-branches and high-performance career paths.</p>
+        </section>
+
+        <section class="stream-grid">
+            <a href="cse.html" class="stream-card">
+                <div>
+                    <h2>Computer Science & Engineering</h2>
+                    <p>Isolate tracks across Data Science, AI & ML, Cyber Security, Cloud, and Software Architecture.</p>
+                </div>
+                <span class="arrow-link">Load Terminal &rarr;</span>
+            </a>
+
+            <a href="ece.html" class="stream-card">
+                <div>
+                    <h2>Electronics & Communication (ECE)</h2>
+                    <p>Explore VLSI Chip Design, Embedded IoT Firmware, and 5G Telecommunications Infrastructure.</p>
+                </div>
+                <span class="arrow-link">Load Terminal &rarr;</span>
+            </a>
+
+            <a href="eee.html" class="stream-card">
+                <div>
+                    <h2>Electrical & Electronics (EEE)</h2>
+                    <p>Dive into Smart Grid Automation, EV Powertrain Controls, and Industrial PLC Systems.</p>
+                </div>
+                <span class="arrow-link">Load Terminal &rarr;</span>
+            </a>
+
+            <a href="mech.html" class="stream-card">
+                <div>
+                    <h2>Mechanical Engineering</h2>
+                    <p>Kinetic vector tracking loops, robotic simulation engines, and automated FEA drafting controls.</p>
+                </div>
+                <span class="arrow-link">Load Terminal &rarr;</span>
+            </a>
+
+            <a href="civil.html" class="stream-card">
+                <div>
+                    <h2>Civil Engineering</h2>
+                    <p>Parametric loading calculations, BIM architectural metadata, and automated structural safety checks.</p>
+                </div>
+                <span class="arrow-link">Load Terminal &rarr;</span>
+            </a>
+        </section>
+
+        <div class="quote-banner">
+            <p>"True engineering readiness relies on building systems to handle live product scales, not memorizing theory to pass semester reviews."</p>
+        </div>
+
+        <footer>
+            <div>&copy; 2026 PathOS Platforms.</div>
+            <div>Topology: All Nodes Active</div>
+        </footer>
+    </main>
+
+    <script>
+        /* --- RESTORED FLUID ANIMATION --- */
+        const targetWord = "pathOS.";
+        const scrambleContainer = document.getElementById('scramble-container');
+
+        // Setup base elements
+        targetWord.split('').forEach(() => {
+            const span = document.createElement('span');
+            span.className = 'scramble-letter';
+            span.innerText = '0';
+            scrambleContainer.appendChild(span);
+        });
+
+        const letterSpans = document.querySelectorAll('.scramble-letter');
+        const chars = "0123456789!@#$%&*";
+        let iterations = 0;
+
+        // Step 1: Rapid Scramble & Lock
+        const scrambleInterval = setInterval(() => {
+            letterSpans.forEach((span, index) => {
+                if (index < iterations) {
+                    span.innerText = targetWord[index];
+                    span.style.color = "#ffffff"; // Lock in as white first
+                    return;
+                }
+                span.innerText = chars[Math.floor(Math.random() * chars.length)];
+            });
+
+            if (iterations >= targetWord.length) {
+                clearInterval(scrambleInterval);
+                triggerColorFlowAndExit();
+            }
+            iterations += 0.25;
+        }, 35);
+
+        // Step 2: Fluent Left-to-Right Color Change & Exit
+        function triggerColorFlowAndExit() {
+            letterSpans.forEach((span, i) => {
+                setTimeout(() => {
+                    span.style.color = 'var(--accent-green)';
+                }, i * 150); // 150ms delay between each letter turning green
+            });
+
+            // Wait for color wave to finish, then fade out screen
+            setTimeout(() => {
+                const preloader = document.getElementById('preloader');
+                preloader.style.transition = 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+                preloader.style.opacity = '0';
+                setTimeout(() => preloader.remove(), 600);
+            }, (targetWord.length * 150) + 400);
+        }
+    </script>
+</body>
+
+</html>
