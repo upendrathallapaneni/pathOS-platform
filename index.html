@@ -579,7 +579,7 @@
                 text-align: center;
             }
         }
-        
+
         @media(max-width: 768px) {
             nav {
                 padding: 20px 24px;
@@ -588,15 +588,36 @@
                 display: none;
             }
             main {
-                padding-left: 24px;
-                padding-right: 24px;
+                padding: 100px 20px 40px;
+            }
+            .hero {
+                padding: 40px 0 60px;
             }
             .hero h1 {
-                font-size: 2.5rem;
+                font-size: 2.2rem;
+            }
+            .about-wrapper {
+                padding: 40px 20px;
+                margin-bottom: 40px;
+            }
+            .about-header h2 {
+                font-size: 2rem;
+            }
+            .about-grid {
+                gap: 20px;
+            }
+            .founder-box {
+                padding: 30px 20px;
             }
         }
         
         @media(max-width: 480px) {
+            .profile-name {
+                display: none;
+            }
+            .profile-trigger {
+                padding: 6px;
+            }
             .profile-sidebar {
                 max-width: 100%;
                 width: 100%;
@@ -605,11 +626,65 @@
             .sidebar-header h2 {
                 font-size: 1.5rem;
             }
+            .hero h1 {
+                font-size: 1.85rem;
+            }
+            .stream-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .stream-card {
+                padding: 30px 24px;
+                min-height: 200px;
+            }
+            .founder-box {
+                padding: 24px 16px;
+                gap: 20px;
+            }
+            footer {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+
+        /* --- PRELOADER STYLES --- */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Syne', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+        }
+        
+        .scramble-letter {
+            display: inline-block;
+            transition: color 0.4s ease;
+            color: #333;
+        }
+
+        @media(max-width: 768px) {
+            #preloader {
+                font-size: 3rem;
+                letter-spacing: -1px;
+            }
         }
     </style>
 </head>
 
 <body>
+
+    <!-- --- PRELOADER --- -->
+    <div id="preloader">
+        <div id="scramble-container"></div>
+    </div>
 
     <nav>
         <a href="index.html" class="logo">pathOS.</a>
@@ -767,6 +842,59 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
     <script src="app.js"></script>
+
+    <!-- --- PRELOADER SCRAMBLE --- -->
+    <script>
+        const targetWord = "pathOS.";
+        const scrambleContainer = document.getElementById('scramble-container');
+
+        if (scrambleContainer) {
+            targetWord.split('').forEach(() => {
+                const span = document.createElement('span');
+                span.className = 'scramble-letter';
+                span.innerText = '0';
+                scrambleContainer.appendChild(span);
+            });
+
+            const letterSpans = document.querySelectorAll('.scramble-letter');
+            const chars = "0123456789!@#$%&*";
+            let iterations = 0;
+
+            const scrambleInterval = setInterval(() => {
+                letterSpans.forEach((span, index) => {
+                    if (index < iterations) {
+                        span.innerText = targetWord[index];
+                        span.style.color = "#ffffff"; // Lock in as white first
+                        return;
+                    }
+                    span.innerText = chars[Math.floor(Math.random() * chars.length)];
+                });
+
+                if (iterations >= targetWord.length) {
+                    clearInterval(scrambleInterval);
+                    triggerColorFlowAndExit();
+                }
+                iterations += 0.25;
+            }, 35);
+
+            function triggerColorFlowAndExit() {
+                letterSpans.forEach((span, i) => {
+                    setTimeout(() => {
+                        span.style.color = 'var(--accent-green)';
+                    }, i * 150);
+                });
+
+                setTimeout(() => {
+                    const preloader = document.getElementById('preloader');
+                    if (preloader) {
+                        preloader.style.transition = 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+                        preloader.style.opacity = '0';
+                        setTimeout(() => preloader.remove(), 600);
+                    }
+                }, (targetWord.length * 150) + 400);
+            }
+        }
+    </script>
 
 </body>
 
