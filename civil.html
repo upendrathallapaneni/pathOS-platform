@@ -240,6 +240,23 @@
             color: var(--text-muted);
             font-size: 0.9rem;
         }
+        
+        @media(max-width: 768px) {
+            header, main {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+            .role-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            .blueprint-content {
+                grid-template-columns: 1fr;
+                padding: 24px;
+                gap: 24px;
+            }
+        }
     </style>
 </head>
 
