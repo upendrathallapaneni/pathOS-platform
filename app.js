@@ -363,10 +363,253 @@ function initCustomCursor() {
     }
 }
 
+let originalStreamGridHtml = '';
+let originalHeroTitle = '';
+let originalHeroDesc = '';
+let originalSectTitle = '';
+
+// Course specific data structure for dynamic UI rendering
+const courseData = {
+    cse: {
+        title: "Computer Science",
+        heroTitle: "Develop Core Systems. Scale Globally.",
+        heroDesc: "Your node is connected to the Software & Systems pipeline. Access your operational modules and clear your final boss projects below.",
+        roles: [
+            {
+                name: "Software Engineer",
+                desc: "Focuses on high-concurrency systems, system programming, and cloud infrastructure.",
+                levels: [
+                    { name: "Level 1: System Design Foundations", detail: "Learn asynchronous execution patterns, API gateways, load balancers, and vertical scaling mechanics." },
+                    { name: "Level 2: Scalable Database Systems", detail: "Configure SQL read-replicas, master-slave failovers, Redis caches, and key-value clustering." },
+                    { name: "Level 3: Orchestration & Networks", detail: "Deploy Docker containers, configure Kubernetes node networks, and set up CI/CD pipelines." }
+                ],
+                boss: "Final Boss Project: Distributed Key-Value Store",
+                bossDesc: "Build a persistent, replicated key-value store with raft consensus protocol from scratch."
+            },
+            {
+                name: "AI & Machine Learning",
+                desc: "Focuses on data engineering pipelines, mathematical modeling, and deep learning architectures.",
+                levels: [
+                    { name: "Level 1: Mathematical Foundations", detail: "Linear algebra, multivariable calculus, probability structures, and gradient descent algorithms." },
+                    { name: "Level 2: Deep Learning Architectures", detail: "Build and train CNNs, LSTMs, and transformer models from raw matrices using backpropagation." },
+                    { name: "Level 3: MLOps & Real-time Inference", detail: "Model quantization, ONNX execution, and real-time streaming feature pipelines." }
+                ],
+                boss: "Final Boss Project: Autonomous LLM Agent",
+                bossDesc: "Deploy a custom-trained transformer model optimized to execute terminal commands based on natural language."
+            },
+            {
+                name: "Cybersecurity Node",
+                desc: "Focuses on security principles, encryption protocols, and pentesting frameworks.",
+                levels: [
+                    { name: "Level 1: Security & Networking Core", detail: "Understand OSI layer security, certificate chains, TLS handshakes, and public-key infrastructure." },
+                    { name: "Level 2: Cryptographic Architectures", detail: "Implement AES encryption, SHA hashing, zero-knowledge proofs, and secure authentication loops." },
+                    { name: "Level 3: Penetration Testing & Audit", detail: "Configure firewalls, perform vulnerability audits, detect stack overflows, and secure memory gaps." }
+                ],
+                boss: "Final Boss Project: Security Auditing Tool",
+                bossDesc: "Build an automated security scanner that analyzes code repositories for API key leaks and buffer overflow threats."
+            },
+            {
+                name: "Frontend Architect",
+                desc: "Focuses on layout performance, semantic layouts, and client-state machines.",
+                levels: [
+                    { name: "Level 1: Core Layout Performance", detail: "Master critical render paths, paint cycles, layouts, and hardware-accelerated transforms." },
+                    { name: "Level 2: State Machines & Streams", detail: "Manage client-state structures, reactive observables, and virtual DOM reconciling loops." },
+                    { name: "Level 3: Web App Performance", detail: "Implement code splitting, service worker caches, lazy loading, and edge rendering setups." }
+                ],
+                boss: "Final Boss Project: Interactive Visual IDE",
+                bossDesc: "Construct a canvas-based browser editor that parses custom code blocks into working HTML previews."
+            }
+        ]
+    },
+    ece: {
+        title: "Electronics & Communication",
+        heroTitle: "Design Next-Gen Hardware & Networks.",
+        heroDesc: "Your node is connected to the ECE pipeline. Access your operational modules and clear your final boss projects below.",
+        roles: [
+            {
+                name: "VLSI Digital Chip Designer",
+                desc: "Focuses on transistor layout, logic gate design, and hardware description languages.",
+                levels: [
+                    { name: "Level 1: CMOS Logic & Gate Design", detail: "Understand transistor configurations, logical effort, and propagation delay loops." },
+                    { name: "Level 2: RTL & Hardware Languages", detail: "Write synthesizable Verilog/VHDL code for registers, ALUs, and state controllers." },
+                    { name: "Level 3: Verification & Testbench", detail: "Write SystemVerilog code, simulate test cases, and analyze logic timing constraints." }
+                ],
+                boss: "Final Boss Project: 8-Bit RISC-V Processor Core",
+                bossDesc: "Design and verify a complete synthesizable RISC-V processor instruction set execution pipeline."
+            },
+            {
+                name: "Embedded IoT Firmware",
+                desc: "Focuses on microcontroller drivers, low-level scheduling, and communications protocols.",
+                levels: [
+                    { name: "Level 1: Bare-Metal Microcontrollers", detail: "Learn register manipulations, interrupt handlers, and hardware clocks using C." },
+                    { name: "Level 2: Low-Level Protocols", detail: "Configure UART, SPI, I2C, and DMA buses to transfer sensor stream payloads." },
+                    { name: "Level 3: Real-Time Operating Systems", detail: "Manage task priorities, mutexes, semaphores, and message queues in FreeRTOS." }
+                ],
+                boss: "Final Boss Project: Smart IoT Gate Controller",
+                bossDesc: "Develop a secure firmware suite that processes encrypted sensor commands with real-time feedback loops."
+            },
+            {
+                name: "5G Wireless Infrastructure",
+                desc: "Focuses on software-defined radios, network layers, and signal processing pipelines.",
+                levels: [
+                    { name: "Level 1: DSP Foundations", detail: "Fast Fourier Transforms, digital filters, modulation schemes, and spectral analysis." },
+                    { name: "Level 2: Antenna & Radio Frontend", detail: "MIMO architectures, beamforming physics, RF transmitters, and impedance matching." },
+                    { name: "Level 3: Core Wireless Protocols", detail: "Understand 3GPP standards, LTE/5G MAC layers, and IP routing encapsulation." }
+                ],
+                boss: "Final Boss Project: Software-Defined Radio Transceiver",
+                bossDesc: "Build a program that encodes, modulates, and transmits real-time digital streams over RF interfaces."
+            }
+        ]
+    },
+    eee: {
+        title: "Electrical & Electronics",
+        heroTitle: "Control Smart Power & Electric Systems.",
+        heroDesc: "Your node is connected to the EEE pipeline. Access your operational modules and clear your final boss projects below.",
+        roles: [
+            {
+                name: "Smart Grid Automation",
+                desc: "Focuses on substation SCADA systems, telemetry streams, and smart metering.",
+                levels: [
+                    { name: "Level 1: Telemetry & SCADA Interface", detail: "Learn Modbus protocols, RTU configurations, and monitoring dashboard design." },
+                    { name: "Level 2: Grid Protection Systems", detail: "Deploy overcurrent relays, differential circuits, and automatic circuit breakers." },
+                    { name: "Level 3: Smart Load Balancing", detail: "Build algorithms that dynamically shift generator speeds based on grid loading predictions." }
+                ],
+                boss: "Final Boss Project: Substation Control Simulation",
+                bossDesc: "Build a graphical interface simulating load-shedding events and automated circuit restarts."
+            },
+            {
+                name: "EV Powertrain Controls",
+                desc: "Focuses on inverter gate drivers, brushless motor control, and battery management.",
+                levels: [
+                    { name: "Level 1: Inverter Power Electronics", detail: "Study IGBT switching states, gate driver isolations, and PWM harmonics." },
+                    { name: "Level 2: Field-Oriented Motor Control", detail: "Implement vector controls for permanent magnet synchronous motors (PMSM)." },
+                    { name: "Level 3: Battery Management Systems", detail: "Monitor state of charge, balance cell voltages, and deploy thermal cutoff checks." }
+                ],
+                boss: "Final Boss Project: EV Traction Inverter Controller",
+                bossDesc: "Design a simulated control loop regulating EV motor torque dynamically based on acceleration input."
+            },
+            {
+                name: "Industrial PLCs & Robotics",
+                desc: "Focuses on ladder logic configurations, industrial buses, and factory automation.",
+                levels: [
+                    { name: "Level 1: Ladder Logic Programming", detail: "Write timers, counters, and logic comparators for Allen-Bradley or Siemens PLCs." },
+                    { name: "Level 2: Industrial Communications", detail: "Configure Profibus, DeviceNet, and EtherNet/IP connections between motors and PLCs." },
+                    { name: "Level 3: Motion Controllers", detail: "Synchronize multi-axis servo drives for pick-and-place robotic arm paths." }
+                ],
+                boss: "Final Boss Project: Automated Assembly Simulator",
+                bossDesc: "Configure ladder logic to coordinate a conveyor belt line, sorting sensor inputs, and pneumatic pusher cycles."
+            }
+        ]
+    },
+    mech: {
+        title: "Mechanical Engineering",
+        heroTitle: "Simulate Kinetic Systems & Robotics.",
+        heroDesc: "Your node is connected to the Mechanical pipeline. Access your operational modules and clear your final boss projects below.",
+        roles: [
+            {
+                name: "Mechatronics & Robotics",
+                desc: "Focuses on servo kinematics, feedback loops, and sensor processing engines.",
+                levels: [
+                    { name: "Level 1: Sensor & Actuator Interface", detail: "Learn stepper controls, encoders, analog sensors, and operational amplifiers." },
+                    { name: "Level 2: Robotic Kinematics", detail: "Calculate forward and inverse kinematics using Denavit-Hartenberg matrices." },
+                    { name: "Level 3: Feedback Control Loops", detail: "Tune PID filters to regulate motor positions under varying torque loads." }
+                ],
+                boss: "Final Boss Project: 3-Axis Robotic Manipulator Core",
+                bossDesc: "Design a control script that moves a robotic end-effector to precise coordinate locations dynamically."
+            },
+            {
+                name: "Aero-Mechanical Simulator",
+                desc: "Focuses on gas dynamics, thermal transfer, and turbine blades.",
+                levels: [
+                    { name: "Level 1: Gas Dynamics & Fluids", detail: "Learn Navier-Stokes equations, boundary layers, and compressible flow mechanics." },
+                    { name: "Level 2: Heat Transfer Modeling", detail: "Run thermal conduction, convection, and radiation simulations for turbine shells." },
+                    { name: "Level 3: Structural Vibrations", detail: "Analyze resonance frequencies, harmonics, and modal structures of rotating blades." }
+                ],
+                boss: "Final Boss Project: Turbine Blade Heat Spreader",
+                bossDesc: "Compute the temperature distribution across a turbine blade model using finite difference algorithms."
+            },
+            {
+                name: "Automated Design & FEA",
+                desc: "Focuses on CAD scripting, solid modeling, and structural stress reviews.",
+                levels: [
+                    { name: "Level 1: CAD Design Automation", detail: "Write parametric scripts to build complex 3D parts inside solid modeling software." },
+                    { name: "Level 2: Finite Element Analysis (FEA)", detail: "Define mesh sizes, boundary supports, and load forces for stress evaluations." },
+                    { name: "Level 3: Topology Optimization", detail: "Run algorithms to subtract weight from load-bearing metal frames safely." }
+                ],
+                boss: "Final Boss Project: Optimizing Drone Arms",
+                bossDesc: "Analyze static stress on a drone frame to minimize weight while keeping safety factors above 2.0."
+            }
+        ]
+    },
+    civil: {
+        title: "Civil Engineering",
+        heroTitle: "Plan Infrastructure. Build Resilient Structures.",
+        heroDesc: "Your node is connected to the Civil & Structural pipeline. Access your operational modules and clear your final boss projects below.",
+        roles: [
+            {
+                name: "Parametric BIM Designer",
+                desc: "Focuses on architectural metadata, design algorithms, and building information modeling.",
+                levels: [
+                    { name: "Level 1: BIM Foundations & Metadata", detail: "Study standard BIM protocols, asset tags, material libraries, and schedule links." },
+                    { name: "Level 2: Visual Programming & CAD Scripts", detail: "Write visual scripts (Dynamo/Grasshopper) to generate parametric geometries." },
+                    { name: "Level 3: Structural Coordination", detail: "Perform clash detection checks between HVAC, electrical, and concrete layouts." }
+                ],
+                boss: "Final Boss Project: Generative Tower Shell Layout",
+                bossDesc: "Develop a script that updates structural column locations dynamically to minimize load offsets."
+            },
+            {
+                name: "Structural Safety Auditor",
+                desc: "Focuses on loading formulas, finite element calculations, and structural safety checks.",
+                levels: [
+                    { name: "Level 1: Loading Calculations", detail: "Calculate dead loads, live loads, wind forces, and seismic stresses on beams." },
+                    { name: "Level 2: Frame Finite Elements", detail: "Calculate internal bending moments, shear diagrams, and joint deflections." },
+                    { name: "Level 3: Soil-Structure Mechanics", detail: "Review foundation settlement profiles, bearing stress limits, and pile reactions." }
+                ],
+                boss: "Final Boss Project: Bridge Truss Fatigue Audit",
+                bossDesc: "Simulate load distributions on a multi-span steel truss bridge to trace potential fatigue failure points."
+            },
+            {
+                name: "Infrastructure Project Node",
+                desc: "Focuses on critical paths, scheduling, cost projections, and construction logistics.",
+                levels: [
+                    { name: "Level 1: Project Critical Paths", detail: "Draw activity networks, map dependencies, and compute early start / late finish paths." },
+                    { name: "Level 2: Cost Projections & Tenders", detail: "Create itemized quantity estimates, cost structures, and verify resource distributions." },
+                    { name: "Level 3: Logistics & Safety Control", detail: "Design sitework traffic routes, layout storage bins, and coordinate crane clearances." }
+                ],
+                boss: "Final Boss Project: Metro Tunnel Construction Layout",
+                bossDesc: "Build a scheduling logic sequence tracking tunnel boring steps, liner placements, and utility installations."
+            }
+        ]
+    }
+};
+
+window.toggleRoleDashboard = function(index) {
+    const body = document.getElementById(`role-body-${index}`);
+    const card = document.getElementById(`role-${index}`);
+    const toggleIcon = card.querySelector('.toggle-icon');
+    
+    if (body.style.display === 'none') {
+        body.style.display = 'block';
+        toggleIcon.innerText = '-';
+        toggleIcon.style.transform = 'rotate(180deg)';
+        card.style.borderColor = 'rgba(0, 255, 102, 0.4)';
+        card.style.boxShadow = '0 10px 30px rgba(0, 255, 102, 0.04)';
+    } else {
+        body.style.display = 'none';
+        toggleIcon.innerText = '+';
+        toggleIcon.style.transform = 'rotate(0deg)';
+        card.style.borderColor = 'var(--glass-border)';
+        card.style.boxShadow = 'none';
+    }
+};
+
 function customizeDashboard() {
     const userBranch = localStorage.getItem('pathos_branch');
-    const cards = document.querySelectorAll('.stream-card');
-    
+    const grid = document.querySelector('.stream-grid');
+    const heroH1 = document.querySelector('.hero h1');
+    const heroP = document.querySelector('.hero p');
+    const sectTitle = document.getElementById('architectures');
+
     // Normalize branch key (extract short code if it contains parentheses, e.g. "Computer Science (CSE)" -> "cse")
     let normalizedBranch = null;
     if (userBranch) {
@@ -384,99 +627,173 @@ function customizeDashboard() {
         }
     }
     
-    // Clear any previous toggler and badges to reset state
-    const previousToggle = document.getElementById('toggleAlternativeBtn');
-    if (previousToggle) {
-        previousToggle.remove();
-    }
-    document.querySelectorAll('.track-badge').forEach(badge => badge.remove());
+    // Clear any previous Return button
+    const prevReturnBtn = document.getElementById('returnToTrackBtn');
+    if (prevReturnBtn) prevReturnBtn.remove();
     
-    if (!normalizedBranch) {
-        // Guest or unassigned, show all
-        cards.forEach(card => card.style.display = 'flex');
+    if (!normalizedBranch || !grid) {
+        // Guest or unassigned node: Restore defaults
+        if (heroH1 && originalHeroTitle) heroH1.innerText = originalHeroTitle;
+        if (heroP && originalHeroDesc) heroP.innerText = originalHeroDesc;
+        if (sectTitle && originalSectTitle) sectTitle.innerText = originalSectTitle;
+        if (grid && originalStreamGridHtml) {
+            grid.innerHTML = originalStreamGridHtml;
+            grid.style.display = 'grid';
+        }
         return;
     }
     
-    let matchedCardExists = false;
-    cards.forEach(card => {
-        const stream = card.getAttribute('data-stream');
-        if (stream === normalizedBranch) {
-            card.style.display = 'flex';
-            
-            // Add a badge inside the card saying "Your Active Track"
-            const badge = document.createElement('span');
-            badge.className = 'track-badge';
-            badge.innerHTML = '[ Primary Node Track ]';
-            badge.style.fontSize = '0.75rem';
-            badge.style.color = '#00ff66';
-            badge.style.border = '1px solid rgba(0, 255, 102, 0.3)';
-            badge.style.background = 'rgba(0, 255, 102, 0.05)';
-            badge.style.padding = '4px 10px';
-            badge.style.borderRadius = '12px';
-            badge.style.alignSelf = 'flex-start';
-            badge.style.marginBottom = '16px';
-            badge.style.fontWeight = '700';
-            badge.style.letterSpacing = '1px';
-            badge.style.display = 'inline-block';
-            
-            const contentDiv = card.querySelector('div');
-            if (contentDiv) {
-                contentDiv.insertBefore(badge, contentDiv.firstChild);
-            }
-            
-            matchedCardExists = true;
+    // Update Hero Title & Description to match selected branch
+    const branchMeta = courseData[normalizedBranch];
+    if (heroH1) heroH1.innerText = branchMeta.heroTitle;
+    if (heroP) heroP.innerText = branchMeta.heroDesc;
+    if (sectTitle) sectTitle.innerText = `${branchMeta.title} Core Terminals`;
+    
+    // Build personalized dynamic interactive curriculum modules HTML
+    let dashboardHtml = `<div class="dashboard-wrapper" style="width: 100%; grid-column: 1 / -1; display: flex; flex-direction: column; gap: 30px;">`;
+    
+    branchMeta.roles.forEach((role, rIndex) => {
+        let iconSvg = '';
+        if (normalizedBranch === 'cse') {
+            iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>`;
+        } else if (normalizedBranch === 'ece' || normalizedBranch === 'eee') {
+            iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="10" x2="6" y2="14"></line><line x1="18" y1="10" x2="18" y2="14"></line></svg>`;
         } else {
-            // Hide alternative courses
-            card.style.display = 'none';
+            iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
         }
+        
+        dashboardHtml += `
+            <div class="role-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; overflow: hidden; transition: all 0.3s;" id="role-${rIndex}">
+                <div class="role-header" onclick="toggleRoleDashboard(${rIndex})" style="padding: 24px 30px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: background 0.2s;">
+                    <div style="display: flex; align-items: center; gap: 16px; text-align: left;">
+                        <div class="role-icon" style="background: rgba(0, 255, 102, 0.1); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            ${iconSvg}
+                        </div>
+                        <div>
+                            <h3 style="font-family: 'Syne', sans-serif; font-size: 1.3rem; margin-bottom: 4px; color: #fff;">${role.name}</h3>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">${role.desc}</p>
+                        </div>
+                    </div>
+                    <span class="toggle-icon" style="font-size: 1.5rem; color: var(--accent-green); transition: transform 0.3s; margin-left: 20px;">+</span>
+                </div>
+                <div class="role-body" id="role-body-${rIndex}" style="display: none; padding: 40px; border-top: 1px solid var(--border-line); text-align: left;">
+                    
+                    <div class="timeline" style="border-left: 2px solid var(--border-line, rgba(255,255,255,0.08)); margin-left: 20px; padding-left: 40px; position: relative; margin-bottom: 40px;">
+                        ${role.levels.map((level, index) => `
+                            <div class="timeline-item" data-level="${index + 1}" style="position: relative; margin-bottom: 40px;">
+                                <style>
+                                    #role-${rIndex} .timeline-item[data-level="${index + 1}"]::before {
+                                        content: '${index + 1}';
+                                        position: absolute;
+                                        left: -57px;
+                                        top: 0;
+                                        width: 32px;
+                                        height: 32px;
+                                        background: var(--surface-light);
+                                        border: 2px solid var(--accent-green);
+                                        border-radius: 50%;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        font-weight: 700;
+                                        color: var(--accent-green);
+                                        font-size: 0.9rem;
+                                        font-family: 'Syne', sans-serif;
+                                    }
+                                    @media (max-width: 768px) {
+                                        #role-${rIndex} .timeline-item[data-level="${index + 1}"]::before {
+                                            left: -41px;
+                                            width: 28px;
+                                            height: 28px;
+                                            font-size: 0.8rem;
+                                        }
+                                    }
+                                </style>
+                                <h4 style="font-family: 'Syne', sans-serif; font-size: 1.2rem; margin-bottom: 8px; color: #fff;">${level.name}</h4>
+                                <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0;">${level.detail}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="boss-level" style="background: rgba(0, 255, 102, 0.03); border: 1px solid rgba(0, 255, 102, 0.15); border-radius: 16px; padding: 30px; position: relative;">
+                        <h5 style="font-family: 'Syne', sans-serif; font-size: 1.1rem; color: var(--accent-green); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 4px rgba(0,255,102,0.4));">
+                                <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                                <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                                <path d="M4 22h16"></path>
+                                <path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34"></path>
+                                <path d="M12 2a6 6 0 0 1 6 6v3.34c0 .73-.13 1.45-.39 2.12l-.22.56a2 2 0 0 1-1.85 1.3H8.46a2 2 0 0 1-1.85-1.3l-.22-.56A5.99 5.99 0 0 1 6 8.34V8a6 6 0 0 1 6-6Z"></path>
+                            </svg>
+                            ${role.boss}
+                        </h5>
+                        <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0;">${role.bossDesc}</p>
+                    </div>
+
+                </div>
+            </div>
+        `;
     });
     
-    // If a card matched, show a toggler below the stream grid to show the rest
-    if (matchedCardExists) {
-        const grid = document.querySelector('.stream-grid');
-        if (grid) {
-            const toggleBtn = document.createElement('button');
-            toggleBtn.id = 'toggleAlternativeBtn';
-            toggleBtn.innerText = 'Show Other Terminals';
-            toggleBtn.style.background = 'transparent';
-            toggleBtn.style.border = '1px solid rgba(255, 255, 255, 0.08)';
-            toggleBtn.style.color = '#a1a1aa';
-            toggleBtn.style.padding = '12px 24px';
-            toggleBtn.style.borderRadius = '12px';
-            toggleBtn.style.cursor = 'pointer';
-            toggleBtn.style.fontFamily = 'inherit';
-            toggleBtn.style.fontWeight = '600';
-            toggleBtn.style.marginTop = '20px';
-            toggleBtn.style.transition = 'all 0.2s';
-            toggleBtn.style.display = 'block';
-            toggleBtn.style.margin = '0 auto 40px';
+    // Add toggler to explore other branches at the bottom
+    dashboardHtml += `
+        <button class="logout-btn" id="toggleAlternativeBtn" style="width: auto; background: transparent; border: 1px solid rgba(255,255,255,0.08); color: var(--text-muted); padding: 12px 24px; border-radius: 12px; cursor: pointer; font-family: inherit; font-weight: 600; display: block; margin: 20px auto 0; transition: all 0.2s;">
+            Explore Other Branches
+        </button>
+    `;
+    
+    dashboardHtml += `</div>`;
+    
+    // Replace grid with dashboard view
+    grid.innerHTML = dashboardHtml;
+    grid.style.display = 'block'; // Block layout for active role list
+    
+    // Bind click event to dynamic alternative explorer button
+    const alternativeBtn = document.getElementById('toggleAlternativeBtn');
+    if (alternativeBtn) {
+        alternativeBtn.addEventListener('click', () => {
+            // Restore regular architectures cards
+            grid.innerHTML = originalStreamGridHtml;
+            grid.style.display = 'grid';
             
-            toggleBtn.addEventListener('mouseenter', () => {
-                toggleBtn.style.borderColor = '#fff';
-                toggleBtn.style.color = '#fff';
-            });
-            toggleBtn.addEventListener('mouseleave', () => {
-                toggleBtn.style.borderColor = 'rgba(255, 255, 255, 0.08)';
-                toggleBtn.style.color = '#a1a1aa';
+            // Add a floating "Return to focus" button right above the core architectures grid
+            const returnBtn = document.createElement('button');
+            returnBtn.id = 'returnToTrackBtn';
+            returnBtn.innerText = `← Return to ${branchMeta.title} Core`;
+            returnBtn.style.background = 'rgba(0, 255, 102, 0.1)';
+            returnBtn.style.border = '1px solid var(--accent-green)';
+            returnBtn.style.color = 'var(--accent-green)';
+            returnBtn.style.padding = '10px 20px';
+            returnBtn.style.borderRadius = '12px';
+            returnBtn.style.cursor = 'pointer';
+            returnBtn.style.fontFamily = 'inherit';
+            returnBtn.style.fontWeight = '700';
+            returnBtn.style.marginBottom = '24px';
+            returnBtn.style.display = 'block';
+            
+            returnBtn.addEventListener('click', () => {
+                customizeDashboard();
             });
             
-            toggleBtn.addEventListener('click', () => {
-                const isShowingAll = toggleBtn.getAttribute('data-showing-all') === 'true';
-                cards.forEach(card => {
-                    if (card.getAttribute('data-stream') !== normalizedBranch) {
-                        card.style.display = isShowingAll ? 'none' : 'flex';
-                    }
-                });
-                toggleBtn.setAttribute('data-showing-all', isShowingAll ? 'false' : 'true');
-                toggleBtn.innerText = isShowingAll ? 'Show Other Terminals' : 'Hide Other Terminals';
-            });
+            grid.parentNode.insertBefore(returnBtn, grid);
             
-            grid.parentNode.insertBefore(toggleBtn, grid.nextSibling);
-        }
+            // Scroll to the button view
+            returnBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Cache original states to enable fully interactive dynamic reverting
+    const heroH1 = document.querySelector('.hero h1');
+    const heroP = document.querySelector('.hero p');
+    const sectTitle = document.getElementById('architectures');
+    const grid = document.querySelector('.stream-grid');
+    
+    if (heroH1) originalHeroTitle = heroH1.innerText;
+    if (heroP) originalHeroDesc = heroP.innerText;
+    if (sectTitle) originalSectTitle = sectTitle.innerText;
+    if (grid) originalStreamGridHtml = grid.innerHTML;
+
     updateProfileSummary();
     initCustomCursor();
     const urlParams = new URLSearchParams(window.location.search);
