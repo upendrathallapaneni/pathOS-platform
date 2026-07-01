@@ -244,19 +244,31 @@
         }
         
         @media(max-width: 768px) {
-            header, main {
-                padding-left: 24px;
-                padding-right: 24px;
+            header {
+                padding: 16px 20px;
+            }
+            main {
+                padding: 100px 20px 40px;
+            }
+            .title-block h1 {
+                font-size: 2.2rem;
             }
             .role-header {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 16px;
+                gap: 12px;
+                padding: 24px 20px;
+            }
+            .role-info h3 {
+                font-size: 1.4rem;
             }
             .blueprint-content {
                 grid-template-columns: 1fr;
-                padding: 24px;
+                padding: 24px 20px;
                 gap: 24px;
+            }
+            .proof-box {
+                padding: 16px;
             }
         }
     </style>
@@ -265,7 +277,7 @@
 <body>
 
     <header>
-        <a href="index.html" class="logo">vecta.</a>
+        <a href="index.html" class="logo">pathOS.</a>
         <a href="index.html" class="back-link">&larr; Back to Map</a>
     </header>
 

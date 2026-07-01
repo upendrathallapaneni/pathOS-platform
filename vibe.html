@@ -258,12 +258,27 @@
         }
         
         @media(max-width: 768px) {
-            header,
+            header {
+                padding: 16px 20px;
+            }
+            .auth-container {
+                padding: 100px 20px 40px;
+            }
+            .login-panel {
+                padding: 30px 20px;
+            }
             .dashboard-container {
-                padding: 24px;
+                padding: 100px 20px 40px;
             }
             .welcome-header h1 {
                 font-size: 2rem;
+            }
+            .courses-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .course-card {
+                padding: 24px;
             }
         }
     </style>
@@ -274,7 +289,7 @@
     <canvas id="ambient-canvas"></canvas>
 
     <header>
-        <a href="index.html" class="logo">happy.</a>
+        <a href="index.html" class="logo">pathOS.</a>
         <span class="terminal-badge">Horizon Node</span>
     </header>
 
