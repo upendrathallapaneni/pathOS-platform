@@ -110,6 +110,13 @@ function updateProfileSummary() {
             };
         }
     }
+
+    // Apply dashboard personalization if on index.html
+    const path = window.location.pathname;
+    const filename = path.substring(path.lastIndexOf('/') + 1);
+    if (filename === 'index.html' || filename === '') {
+        customizeDashboard();
+    }
 }
 
 window.logoutUser = function() {
@@ -353,6 +360,119 @@ function initCustomCursor() {
             requestAnimationFrame(renderCursor);
         }
         requestAnimationFrame(renderCursor);
+    }
+}
+
+function customizeDashboard() {
+    const userBranch = localStorage.getItem('pathos_branch');
+    const cards = document.querySelectorAll('.stream-card');
+    
+    // Normalize branch key (extract short code if it contains parentheses, e.g. "Computer Science (CSE)" -> "cse")
+    let normalizedBranch = null;
+    if (userBranch) {
+        const lower = userBranch.toLowerCase();
+        if (lower.includes('cse') || lower.includes('computer science')) {
+            normalizedBranch = 'cse';
+        } else if (lower.includes('ece') || lower.includes('electronics')) {
+            normalizedBranch = 'ece';
+        } else if (lower.includes('eee') || lower.includes('electrical')) {
+            normalizedBranch = 'eee';
+        } else if (lower.includes('mech') || lower.includes('mechanical')) {
+            normalizedBranch = 'mech';
+        } else if (lower.includes('civil')) {
+            normalizedBranch = 'civil';
+        }
+    }
+    
+    // Clear any previous toggler and badges to reset state
+    const previousToggle = document.getElementById('toggleAlternativeBtn');
+    if (previousToggle) {
+        previousToggle.remove();
+    }
+    document.querySelectorAll('.track-badge').forEach(badge => badge.remove());
+    
+    if (!normalizedBranch) {
+        // Guest or unassigned, show all
+        cards.forEach(card => card.style.display = 'flex');
+        return;
+    }
+    
+    let matchedCardExists = false;
+    cards.forEach(card => {
+        const stream = card.getAttribute('data-stream');
+        if (stream === normalizedBranch) {
+            card.style.display = 'flex';
+            
+            // Add a badge inside the card saying "Your Active Track"
+            const badge = document.createElement('span');
+            badge.className = 'track-badge';
+            badge.innerHTML = '[ Primary Node Track ]';
+            badge.style.fontSize = '0.75rem';
+            badge.style.color = '#00ff66';
+            badge.style.border = '1px solid rgba(0, 255, 102, 0.3)';
+            badge.style.background = 'rgba(0, 255, 102, 0.05)';
+            badge.style.padding = '4px 10px';
+            badge.style.borderRadius = '12px';
+            badge.style.alignSelf = 'flex-start';
+            badge.style.marginBottom = '16px';
+            badge.style.fontWeight = '700';
+            badge.style.letterSpacing = '1px';
+            badge.style.display = 'inline-block';
+            
+            const contentDiv = card.querySelector('div');
+            if (contentDiv) {
+                contentDiv.insertBefore(badge, contentDiv.firstChild);
+            }
+            
+            matchedCardExists = true;
+        } else {
+            // Hide alternative courses
+            card.style.display = 'none';
+        }
+    });
+    
+    // If a card matched, show a toggler below the stream grid to show the rest
+    if (matchedCardExists) {
+        const grid = document.querySelector('.stream-grid');
+        if (grid) {
+            const toggleBtn = document.createElement('button');
+            toggleBtn.id = 'toggleAlternativeBtn';
+            toggleBtn.innerText = 'Show Other Terminals';
+            toggleBtn.style.background = 'transparent';
+            toggleBtn.style.border = '1px solid rgba(255, 255, 255, 0.08)';
+            toggleBtn.style.color = '#a1a1aa';
+            toggleBtn.style.padding = '12px 24px';
+            toggleBtn.style.borderRadius = '12px';
+            toggleBtn.style.cursor = 'pointer';
+            toggleBtn.style.fontFamily = 'inherit';
+            toggleBtn.style.fontWeight = '600';
+            toggleBtn.style.marginTop = '20px';
+            toggleBtn.style.transition = 'all 0.2s';
+            toggleBtn.style.display = 'block';
+            toggleBtn.style.margin = '0 auto 40px';
+            
+            toggleBtn.addEventListener('mouseenter', () => {
+                toggleBtn.style.borderColor = '#fff';
+                toggleBtn.style.color = '#fff';
+            });
+            toggleBtn.addEventListener('mouseleave', () => {
+                toggleBtn.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                toggleBtn.style.color = '#a1a1aa';
+            });
+            
+            toggleBtn.addEventListener('click', () => {
+                const isShowingAll = toggleBtn.getAttribute('data-showing-all') === 'true';
+                cards.forEach(card => {
+                    if (card.getAttribute('data-stream') !== normalizedBranch) {
+                        card.style.display = isShowingAll ? 'none' : 'flex';
+                    }
+                });
+                toggleBtn.setAttribute('data-showing-all', isShowingAll ? 'false' : 'true');
+                toggleBtn.innerText = isShowingAll ? 'Show Other Terminals' : 'Hide Other Terminals';
+            });
+            
+            grid.parentNode.insertBefore(toggleBtn, grid.nextSibling);
+        }
     }
 }
 
