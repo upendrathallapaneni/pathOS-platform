@@ -289,22 +289,39 @@
         }
         
         @media(max-width: 768px) {
-            header,
+            header {
+                padding: 16px 20px;
+            }
             main {
-                padding-left: 24px;
-                padding-right: 24px;
+                padding: 100px 20px 40px;
+            }
+            .title-block h1 {
+                font-size: 2.2rem;
             }
             .role-header {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 16px;
+                gap: 12px;
+                padding: 24px 20px;
+            }
+            .role-info h3 {
+                font-size: 1.4rem;
+            }
+            .blueprint-content {
+                padding: 24px 20px;
             }
             .timeline {
                 margin-left: 10px;
-                padding-left: 30px;
+                padding-left: 24px;
             }
             .timeline-item::before {
-                left: -47px;
+                left: -41px;
+                width: 28px;
+                height: 28px;
+                font-size: 0.8rem;
+            }
+            .boss-level {
+                padding: 20px;
             }
         }
     </style>

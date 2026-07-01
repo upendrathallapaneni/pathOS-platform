@@ -368,7 +368,7 @@ let originalHeroTitle = '';
 let originalHeroDesc = '';
 let originalSectTitle = '';
 
-// Course specific data structure for dynamic UI rendering
+// Detailed course-specific roadmap structures for dynamic landing page generation
 const courseData = {
     cse: {
         title: "Computer Science",
@@ -376,48 +376,52 @@ const courseData = {
         heroDesc: "Your node is connected to the Software & Systems pipeline. Access your operational modules and clear your final boss projects below.",
         roles: [
             {
-                name: "Software Engineer",
-                desc: "Focuses on high-concurrency systems, system programming, and cloud infrastructure.",
+                name: "Machine Learning Engineer",
+                desc: "Don't just use AI—build it. Teach systems to recognize patterns, process natural language, and run inference cycles.",
                 levels: [
-                    { name: "Level 1: System Design Foundations", detail: "Learn asynchronous execution patterns, API gateways, load balancers, and vertical scaling mechanics." },
-                    { name: "Level 2: Scalable Database Systems", detail: "Configure SQL read-replicas, master-slave failovers, Redis caches, and key-value clustering." },
-                    { name: "Level 3: Orchestration & Networks", detail: "Deploy Docker containers, configure Kubernetes node networks, and set up CI/CD pipelines." }
+                    { name: "Level 1: Language Foundation (Python)", detail: "Master loops, functions, object-oriented design, list comprehensions, and system standard libraries." },
+                    { name: "Level 2: Data Manipulation (Pandas & NumPy)", detail: "Clean messy tabular data, calculate matrix statistics, filter arrays, and configure CSV/Parquet pipelines." },
+                    { name: "Level 3: Classical Predictors (Scikit-Learn)", detail: "Implement linear regressions, decision tree classifiers, support vector machines, and evaluate error metrics." },
+                    { name: "Level 4: Deep Learning Networks (PyTorch)", detail: "Build multi-layer artificial neural networks, compute backpropagation loops, train CNNs, and tune gradient descent." }
                 ],
-                boss: "Final Boss Project: Distributed Key-Value Store",
-                bossDesc: "Build a persistent, replicated key-value store with raft consensus protocol from scratch."
+                boss: "Final Boss Project: Intelligent Recommendation Engine",
+                bossDesc: "Build and deploy a live API that analyzes a user's Spotify history and predicts song choices using custom PyTorch embeddings."
             },
             {
-                name: "AI & Machine Learning",
-                desc: "Focuses on data engineering pipelines, mathematical modeling, and deep learning architectures.",
+                name: "Data Engineer",
+                desc: "The plumber of big data. Build pipelines that move millions of data points instantly and securely.",
                 levels: [
-                    { name: "Level 1: Mathematical Foundations", detail: "Linear algebra, multivariable calculus, probability structures, and gradient descent algorithms." },
-                    { name: "Level 2: Deep Learning Architectures", detail: "Build and train CNNs, LSTMs, and transformer models from raw matrices using backpropagation." },
-                    { name: "Level 3: MLOps & Real-time Inference", detail: "Model quantization, ONNX execution, and real-time streaming feature pipelines." }
+                    { name: "Level 1: Storage Foundations (SQL)", detail: "Master database schemas, complex joins, indexing, partitions, and execution plan optimization." },
+                    { name: "Level 2: Pipeline Scripting (Python)", detail: "Write automation scripts, query REST APIs, parse JSON blobs, and schedule batch tasks." },
+                    { name: "Level 3: Distributed Streams (Kafka & Spark)", detail: "Configure event-streaming brokers, handle pub-sub topics, and process large-scale data in memory." },
+                    { name: "Level 4: Warehousing & Cloud (Snowflake)", detail: "Design cloud storage warehouses, manage ETL pipelines on AWS/GCP, and run analytical queries." }
                 ],
-                boss: "Final Boss Project: Autonomous LLM Agent",
-                bossDesc: "Deploy a custom-trained transformer model optimized to execute terminal commands based on natural language."
+                boss: "Final Boss Project: Live Stock Market Tracker",
+                bossDesc: "Write a high-frequency script to pull live market values, stream them through Apache Kafka, and load them into a cloud database."
             },
             {
-                name: "Cybersecurity Node",
-                desc: "Focuses on security principles, encryption protocols, and pentesting frameworks.",
+                name: "Cyber Security Analyst / Ethical Hacker",
+                desc: "Act as the digital shield. Audit systems, find vulnerabilities, and fix code bugs before attackers do.",
                 levels: [
-                    { name: "Level 1: Security & Networking Core", detail: "Understand OSI layer security, certificate chains, TLS handshakes, and public-key infrastructure." },
-                    { name: "Level 2: Cryptographic Architectures", detail: "Implement AES encryption, SHA hashing, zero-knowledge proofs, and secure authentication loops." },
-                    { name: "Level 3: Penetration Testing & Audit", detail: "Configure firewalls, perform vulnerability audits, detect stack overflows, and secure memory gaps." }
+                    { name: "Level 1: Computer Networking Core", detail: "Master IP subnetting, DNS routing, firewalls, and the OSI model packet flows." },
+                    { name: "Level 2: Secure Operating Systems (Linux)", detail: "Navigate via CLI, manage user groups, edit secure permissions, and review log audit files." },
+                    { name: "Level 3: Web Vulnerabilities (OWASP Top 10)", detail: "Understand SQL Injections, Cross-Site Scripting (XSS), CSRF, and authentication loopholes." },
+                    { name: "Level 4: Penetration Testing Tools", detail: "Intercept HTTP traffic with Burp Suite, run vulnerability audits via Nmap, and run metasploit shells." }
                 ],
-                boss: "Final Boss Project: Security Auditing Tool",
-                bossDesc: "Build an automated security scanner that analyzes code repositories for API key leaks and buffer overflow threats."
+                boss: "Final Boss Project: Automated Threat Scanner",
+                bossDesc: "Build a Python utility that scans any target URL for open ports, missing SSL certificates, and out-of-date scripts."
             },
             {
-                name: "Frontend Architect",
-                desc: "Focuses on layout performance, semantic layouts, and client-state machines.",
+                name: "Full-Stack Web Developer",
+                desc: "Build responsive interfaces and backend servers. Bridge client experiences with secure databases.",
                 levels: [
-                    { name: "Level 1: Core Layout Performance", detail: "Master critical render paths, paint cycles, layouts, and hardware-accelerated transforms." },
-                    { name: "Level 2: State Machines & Streams", detail: "Manage client-state structures, reactive observables, and virtual DOM reconciling loops." },
-                    { name: "Level 3: Web App Performance", detail: "Implement code splitting, service worker caches, lazy loading, and edge rendering setups." }
+                    { name: "Level 1: Interactive Client (HTML/CSS & React)", detail: "Design responsive layouts with Flexbox/Grid, manage state, and render components in React." },
+                    { name: "Level 2: Server Applications (Node.js)", detail: "Write asynchronous server logic, handle routing, and implement middleware handlers." },
+                    { name: "Level 3: Database Integrations (PostgreSQL)", detail: "Design relational models, query records, and coordinate secure user password hashing." },
+                    { name: "Level 4: API Bridges & Systems (REST)", detail: "Build RESTful endpoints, parse body requests, configure CORS policies, and test via Postman." }
                 ],
-                boss: "Final Boss Project: Interactive Visual IDE",
-                bossDesc: "Construct a canvas-based browser editor that parses custom code blocks into working HTML previews."
+                boss: "Final Boss Project: Social Platform Engine",
+                bossDesc: "Develop a functional micro-blogging site complete with user registration, tweet updates, follower lines, and live feed updates."
             }
         ]
     },
@@ -427,37 +431,40 @@ const courseData = {
         heroDesc: "Your node is connected to the ECE pipeline. Access your operational modules and clear your final boss projects below.",
         roles: [
             {
-                name: "VLSI Digital Chip Designer",
-                desc: "Focuses on transistor layout, logic gate design, and hardware description languages.",
+                name: "ASIC / VLSI Design Engineer",
+                desc: "Designs the micro-architecture of silicon chips that power modern consumer electronics and AI model training.",
                 levels: [
-                    { name: "Level 1: CMOS Logic & Gate Design", detail: "Understand transistor configurations, logical effort, and propagation delay loops." },
-                    { name: "Level 2: RTL & Hardware Languages", detail: "Write synthesizable Verilog/VHDL code for registers, ALUs, and state controllers." },
-                    { name: "Level 3: Verification & Testbench", detail: "Write SystemVerilog code, simulate test cases, and analyze logic timing constraints." }
+                    { name: "Level 1: Digital Logic Design", detail: "Master logic gate structures, Karnaugh maps, flip-flop state machines, and clock timing constraints." },
+                    { name: "Level 2: RTL Hardware Languages", detail: "Write synthesizable Verilog/VHDL configurations to describe registers, logic multiplexers, and ALUs." },
+                    { name: "Level 3: CMOS Gate Fabrication", detail: "Study transistor layouts, CMOS gate steps, propagation delay factors, and silicon scaling limits." },
+                    { name: "Level 4: verification & Verification Testing", detail: "Write SystemVerilog code, simulate testbench boundaries, and deploy UVM (Universal Verification) cycles." }
                 ],
-                boss: "Final Boss Project: 8-Bit RISC-V Processor Core",
-                bossDesc: "Design and verify a complete synthesizable RISC-V processor instruction set execution pipeline."
+                boss: "Final Boss Project: Custom 16-bit ALU Core",
+                bossDesc: "Write the Verilog RTL for a 16-bit Arithmetic Logic Unit, create a comprehensive testbench, and synthesize on an FPGA."
             },
             {
-                name: "Embedded IoT Firmware",
-                desc: "Focuses on microcontroller drivers, low-level scheduling, and communications protocols.",
+                name: "Embedded Firmware Engineer",
+                desc: "Writes low-level software that runs directly on microcontroller hardware without standard operating systems.",
                 levels: [
-                    { name: "Level 1: Bare-Metal Microcontrollers", detail: "Learn register manipulations, interrupt handlers, and hardware clocks using C." },
-                    { name: "Level 2: Low-Level Protocols", detail: "Configure UART, SPI, I2C, and DMA buses to transfer sensor stream payloads." },
-                    { name: "Level 3: Real-Time Operating Systems", detail: "Manage task priorities, mutexes, semaphores, and message queues in FreeRTOS." }
+                    { name: "Level 1: Memory-Safe C & Pointers", detail: "Master memory allocation in C, register pointer arithmetic, and bit-masking manipulations." },
+                    { name: "Level 2: Bare-Metal Microcontrollers", detail: "Program STM32 (ARM Cortex) or ESP32 boards using direct memory-mapped register configurations." },
+                    { name: "Level 3: Real-Time Kernels (RTOS)", detail: "Configure scheduler priorities, manage thread tasks, mutex locks, and queue semaphores in FreeRTOS." },
+                    { name: "Level 4: Hardware Interfaces", detail: "Configure hardware communication protocols including I2C, SPI, UART, and analyze signals with oscilloscopes." }
                 ],
-                boss: "Final Boss Project: Smart IoT Gate Controller",
-                bossDesc: "Develop a secure firmware suite that processes encrypted sensor commands with real-time feedback loops."
+                boss: "Final Boss Project: RTOS Weather Node",
+                bossDesc: "Build a physical weather sensor node. Parse sensor data via I2C in FreeRTOS and post securely to an AWS dashboard via MQTT."
             },
             {
-                name: "5G Wireless Infrastructure",
-                desc: "Focuses on software-defined radios, network layers, and signal processing pipelines.",
+                name: "Network Infrastructure Engineer",
+                desc: "Designs and optimizes high-frequency signal processing networks and wireless communications.",
                 levels: [
-                    { name: "Level 1: DSP Foundations", detail: "Fast Fourier Transforms, digital filters, modulation schemes, and spectral analysis." },
-                    { name: "Level 2: Antenna & Radio Frontend", detail: "MIMO architectures, beamforming physics, RF transmitters, and impedance matching." },
-                    { name: "Level 3: Core Wireless Protocols", detail: "Understand 3GPP standards, LTE/5G MAC layers, and IP routing encapsulation." }
+                    { name: "Level 1: Signal Mathematics (DSP)", detail: "Understand digital signal processing, Fast Fourier Transforms, frequency domains, and modulation." },
+                    { name: "Level 2: MATLAB Signal Modeling", detail: "Build MATLAB/Simulink projects to model signal attenuation, white noise, and filter conversions." },
+                    { name: "Level 3: Software-Defined Radios (SDR)", detail: "Work with GNU Radio block configurations, decode RF bands, and configure software mixers." },
+                    { name: "Level 4: Network Sockets & Automation", detail: "Learn Python to automate TCP/IP network testing, configure sockets, and run connection checks." }
                 ],
-                boss: "Final Boss Project: Software-Defined Radio Transceiver",
-                bossDesc: "Build a program that encodes, modulates, and transmits real-time digital streams over RF interfaces."
+                boss: "Final Boss Project: Custom SDR FM Receiver",
+                bossDesc: "Connect an RTL-SDR receiver to capture live FM radio signals, filtering and decoding the audio streams via GNU Radio."
             }
         ]
     },
@@ -467,37 +474,40 @@ const courseData = {
         heroDesc: "Your node is connected to the EEE pipeline. Access your operational modules and clear your final boss projects below.",
         roles: [
             {
-                name: "Smart Grid Automation",
-                desc: "Focuses on substation SCADA systems, telemetry streams, and smart metering.",
+                name: "Smart Grid Systems Engineer",
+                desc: "Writes grid automation logic to balance load spikes, isolate line faults, and sync smart meters.",
                 levels: [
-                    { name: "Level 1: Telemetry & SCADA Interface", detail: "Learn Modbus protocols, RTU configurations, and monitoring dashboard design." },
-                    { name: "Level 2: Grid Protection Systems", detail: "Deploy overcurrent relays, differential circuits, and automatic circuit breakers." },
-                    { name: "Level 3: Smart Load Balancing", detail: "Build algorithms that dynamically shift generator speeds based on grid loading predictions." }
+                    { name: "Level 1: Power Flow Calculations", detail: "Calculate AC/DC currents, active/reactive power loads, phase angles, and line impedances." },
+                    { name: "Level 2: ETAP Grid Simulations", detail: "Model grid networks in ETAP/MATLAB to simulate power system transients and load distribution." },
+                    { name: "Level 3: Substation SCADA Networks", detail: "Configure remote telemetry units (RTUs), SCADA dashboards, and Modbus communication loops." },
+                    { name: "Level 4: Python Telemetry Analytics", detail: "Process smart meter logs, clean load databases, and write predictive consumption scripts." }
                 ],
-                boss: "Final Boss Project: Substation Control Simulation",
-                bossDesc: "Build a graphical interface simulating load-shedding events and automated circuit restarts."
+                boss: "Final Boss Project: Simulated Microgrid Load Balancer",
+                bossDesc: "Write a simulation model in MATLAB that balances household power loads by switching dynamically between solar and storage."
             },
             {
-                name: "EV Powertrain Controls",
-                desc: "Focuses on inverter gate drivers, brushless motor control, and battery management.",
+                name: "EV Powertrain Control Engineer",
+                desc: "Develops the high-voltage logic boards that invert battery currents and drive electric traction motors.",
                 levels: [
-                    { name: "Level 1: Inverter Power Electronics", detail: "Study IGBT switching states, gate driver isolations, and PWM harmonics." },
-                    { name: "Level 2: Field-Oriented Motor Control", detail: "Implement vector controls for permanent magnet synchronous motors (PMSM)." },
-                    { name: "Level 3: Battery Management Systems", detail: "Monitor state of charge, balance cell voltages, and deploy thermal cutoff checks." }
+                    { name: "Level 1: Three-Phase Inverter Circuits", detail: "Design IGBT gate drivers, study switching layouts, and minimize PWM harmonics." },
+                    { name: "Level 2: Field-Oriented Control (FOC)", detail: "Master FOC motor algorithms to regulate speed and torque profiles dynamically." },
+                    { name: "Level 3: Simulink Modeling & Testing", detail: "Build block diagrams in MATLAB/Simulink to simulate EV motor behavior on high-speed roads." },
+                    { name: "Level 4: CAN Bus Communications", detail: "Implement CAN bus configurations to send cell logs to dashboard interfaces." }
                 ],
-                boss: "Final Boss Project: EV Traction Inverter Controller",
-                bossDesc: "Design a simulated control loop regulating EV motor torque dynamically based on acceleration input."
+                boss: "Final Boss Project: Motor Control Simulation",
+                bossDesc: "Implement a Field Oriented Control pipeline for a brushless motor in Simulink, handling simulated load torque spikes."
             },
             {
-                name: "Industrial PLCs & Robotics",
-                desc: "Focuses on ladder logic configurations, industrial buses, and factory automation.",
+                name: "Industrial Automation Engineer",
+                desc: "Programs robotic cells, industrial PLCs, and factory assembly lines.",
                 levels: [
-                    { name: "Level 1: Ladder Logic Programming", detail: "Write timers, counters, and logic comparators for Allen-Bradley or Siemens PLCs." },
-                    { name: "Level 2: Industrial Communications", detail: "Configure Profibus, DeviceNet, and EtherNet/IP connections between motors and PLCs." },
-                    { name: "Level 3: Motion Controllers", detail: "Synchronize multi-axis servo drives for pick-and-place robotic arm paths." }
+                    { name: "Level 1: PLC Ladder Logic", detail: "Program Allen-Bradley/Siemens PLC units, write timers, counter loops, and comparators." },
+                    { name: "Level 2: PID Control Loop Tuning", detail: "Tune proportional-integral-derivative parameters to maintain speed/temperature limits." },
+                    { name: "Level 3: Sensor & Signal Conditioning", detail: "Connect industrial sensors, calibrate analog voltages, and filter electrical noise." },
+                    { name: "Level 4: Industrial IoT Integration", detail: "Bridge operational PLC hardware networks with enterprise databases via MQTT protocols." }
                 ],
-                boss: "Final Boss Project: Automated Assembly Simulator",
-                bossDesc: "Configure ladder logic to coordinate a conveyor belt line, sorting sensor inputs, and pneumatic pusher cycles."
+                boss: "Final Boss Project: Automated Sorting Conveyor Logic",
+                bossDesc: "Develop PLC ladder logic to manage a conveyor sorting system, routing packages by size based on sensor registers."
             }
         ]
     },
@@ -507,37 +517,40 @@ const courseData = {
         heroDesc: "Your node is connected to the Mechanical pipeline. Access your operational modules and clear your final boss projects below.",
         roles: [
             {
-                name: "Mechatronics & Robotics",
-                desc: "Focuses on servo kinematics, feedback loops, and sensor processing engines.",
+                name: "Robotics Control Engineer",
+                desc: "Write controller logic that coordinates mechanical joints, reads sensor feedback, and navigates environments.",
                 levels: [
-                    { name: "Level 1: Sensor & Actuator Interface", detail: "Learn stepper controls, encoders, analog sensors, and operational amplifiers." },
-                    { name: "Level 2: Robotic Kinematics", detail: "Calculate forward and inverse kinematics using Denavit-Hartenberg matrices." },
-                    { name: "Level 3: Feedback Control Loops", detail: "Tune PID filters to regulate motor positions under varying torque loads." }
+                    { name: "Level 1: Microcontrollers & Motors (C++)", detail: "Learn stepper/servo controls, analog-to-digital sensor reads, and coordinate C++ scripts." },
+                    { name: "Level 2: Joint Kinematics Math", detail: "Calculate forward and inverse kinematics using Denavit-Hartenberg transformation matrices." },
+                    { name: "Level 3: Robot Operating System (ROS)", detail: "Configure node topics, launch configurations, publish sensor telemetry, and subscribe to controllers." },
+                    { name: "Level 4: Computer Vision (OpenCV)", detail: "Write python OpenCV scripts to track objects, detect edge outlines, and guide robotic paths." }
                 ],
-                boss: "Final Boss Project: 3-Axis Robotic Manipulator Core",
-                bossDesc: "Design a control script that moves a robotic end-effector to precise coordinate locations dynamically."
+                boss: "Final Boss Project: Autonomous Navigation Rover",
+                bossDesc: "Create a 3D rover simulation in Gazebo/ROS. Program it to navigate a maze using simulated LiDAR sensors."
             },
             {
-                name: "Aero-Mechanical Simulator",
-                desc: "Focuses on gas dynamics, thermal transfer, and turbine blades.",
+                name: "Simulation & FEA Architect",
+                desc: "Predict heat, stress, and flow failures using engineering software before parts are ever manufactured.",
                 levels: [
-                    { name: "Level 1: Gas Dynamics & Fluids", detail: "Learn Navier-Stokes equations, boundary layers, and compressible flow mechanics." },
-                    { name: "Level 2: Heat Transfer Modeling", detail: "Run thermal conduction, convection, and radiation simulations for turbine shells." },
-                    { name: "Level 3: Structural Vibrations", detail: "Analyze resonance frequencies, harmonics, and modal structures of rotating blades." }
+                    { name: "Level 1: Parametric 3D CAD Modeling", detail: "Master SolidWorks/CATIA to build clean, constrained 3D parts and assembly models." },
+                    { name: "Level 2: Static & Dynamic Physics", detail: "Review solid mechanics, stress tensors, thermal conduction, and flow boundary calculations." },
+                    { name: "Level 3: Mesh Geometry Generation", detail: "Generate optimized FEA meshes, balance coordinate resolution against CPU execution, and fix node errors." },
+                    { name: "Level 4: Structural ANSYS Simulations", detail: "Apply loads, constraints, and boundary properties to analyze strain distributions in ANSYS." }
                 ],
-                boss: "Final Boss Project: Turbine Blade Heat Spreader",
-                bossDesc: "Compute the temperature distribution across a turbine blade model using finite difference algorithms."
+                boss: "Final Boss Project: Weight Reduction Optimization",
+                bossDesc: "Design a load bracket in SolidWorks, run static stress analysis in ANSYS, and optimize shape to reduce weight by 20%."
             },
             {
-                name: "Automated Design & FEA",
-                desc: "Focuses on CAD scripting, solid modeling, and structural stress reviews.",
+                name: "EV Battery Systems Engineer",
+                desc: "Design battery thermal housing layouts and BMS logic constraints for electric vehicles.",
                 levels: [
-                    { name: "Level 1: CAD Design Automation", detail: "Write parametric scripts to build complex 3D parts inside solid modeling software." },
-                    { name: "Level 2: Finite Element Analysis (FEA)", detail: "Define mesh sizes, boundary supports, and load forces for stress evaluations." },
-                    { name: "Level 3: Topology Optimization", detail: "Run algorithms to subtract weight from load-bearing metal frames safely." }
+                    { name: "Level 1: Lithium-ion Cell Physics", detail: "Study battery chemistry, charge profiles, heat generation, and capacity degradation curves." },
+                    { name: "Level 2: Embedded Firmware (C)", detail: "Write C micro-controllers to monitor cell temperatures and balance cell charging." },
+                    { name: "Level 3: Vehicle CAN Networking", detail: "Decode automotive CAN networks to relay battery health registers to controller nodes." },
+                    { name: "Level 4: BMS Simulink Modeling", detail: "Model battery state-of-charge loops and thermal boundaries in MATLAB/Simulink." }
                 ],
-                boss: "Final Boss Project: Optimizing Drone Arms",
-                bossDesc: "Analyze static stress on a drone frame to minimize weight while keeping safety factors above 2.0."
+                boss: "Final Boss Project: EV Battery Management System",
+                bossDesc: "Develop a simulated BMS state machine that monitors voltage thresholds, balances cells, and cuts off power on fault logs."
             }
         ]
     },
@@ -547,37 +560,28 @@ const courseData = {
         heroDesc: "Your node is connected to the Civil & Structural pipeline. Access your operational modules and clear your final boss projects below.",
         roles: [
             {
-                name: "Parametric BIM Designer",
-                desc: "Focuses on architectural metadata, design algorithms, and building information modeling.",
+                name: "BIM Computational Designer",
+                desc: "Uses script automation to coordinate structural designs and manage 3D modeling metadata.",
                 levels: [
-                    { name: "Level 1: BIM Foundations & Metadata", detail: "Study standard BIM protocols, asset tags, material libraries, and schedule links." },
-                    { name: "Level 2: Visual Programming & CAD Scripts", detail: "Write visual scripts (Dynamo/Grasshopper) to generate parametric geometries." },
-                    { name: "Level 3: Structural Coordination", detail: "Perform clash detection checks between HVAC, electrical, and concrete layouts." }
+                    { name: "Level 1: Parametric BIM Modelling (Revit)", detail: "Learn Autodesk Revit parameters, manage asset families, and structure model schedules." },
+                    { name: "Level 2: Dynamo Visual Scripting", detail: "Develop visual scripts to automate column layouts, generate geometries, and clean metadata." },
+                    { name: "Level 3: Python API Plugins (PyRevit)", detail: "Write Python scripts accessing the Revit API to create custom modeling workflows." },
+                    { name: "Level 4: Spatial Coordination (Navisworks)", detail: "Run spatial clash detection tests across structural concrete, HVAC ducting, and piping systems." }
                 ],
-                boss: "Final Boss Project: Generative Tower Shell Layout",
-                bossDesc: "Develop a script that updates structural column locations dynamically to minimize load offsets."
+                boss: "Final Boss Project: Automated Structural Support Generator",
+                bossDesc: "Build a Dynamo/Python script that analyzes a Revit structural plan and places steel column families matching spacing codes."
             },
             {
-                name: "Structural Safety Auditor",
-                desc: "Focuses on loading formulas, finite element calculations, and structural safety checks.",
+                name: "Urban GIS Data Architect",
+                desc: "Manages geographic databases and spatial telemetry used for infrastructure routing.",
                 levels: [
-                    { name: "Level 1: Loading Calculations", detail: "Calculate dead loads, live loads, wind forces, and seismic stresses on beams." },
-                    { name: "Level 2: Frame Finite Elements", detail: "Calculate internal bending moments, shear diagrams, and joint deflections." },
-                    { name: "Level 3: Soil-Structure Mechanics", detail: "Review foundation settlement profiles, bearing stress limits, and pile reactions." }
+                    { name: "Level 1: GIS Spatial Geometries", detail: "Master coordinate systems, projections, vector raster datasets, and remote sensing maps." },
+                    { name: "Level 2: Spatial SQL Databases (PostGIS)", detail: "Write SQL databases using PostGIS extensions to query spatial shapes and distances." },
+                    { name: "Level 3: Python Geo-Libraries", detail: "Analyze spatial patterns using GeoPandas, execute shape joins, and map overlays in Jupyter." },
+                    { name: "Level 4: Web Maps & Interfaces", detail: "Publish spatial coordinates to web frameworks using Leaflet or Folium map widgets." }
                 ],
-                boss: "Final Boss Project: Bridge Truss Fatigue Audit",
-                bossDesc: "Simulate load distributions on a multi-span steel truss bridge to trace potential fatigue failure points."
-            },
-            {
-                name: "Infrastructure Project Node",
-                desc: "Focuses on critical paths, scheduling, cost projections, and construction logistics.",
-                levels: [
-                    { name: "Level 1: Project Critical Paths", detail: "Draw activity networks, map dependencies, and compute early start / late finish paths." },
-                    { name: "Level 2: Cost Projections & Tenders", detail: "Create itemized quantity estimates, cost structures, and verify resource distributions." },
-                    { name: "Level 3: Logistics & Safety Control", detail: "Design sitework traffic routes, layout storage bins, and coordinate crane clearances." }
-                ],
-                boss: "Final Boss Project: Metro Tunnel Construction Layout",
-                bossDesc: "Build a scheduling logic sequence tracking tunnel boring steps, liner placements, and utility installations."
+                boss: "Final Boss Project: Flood Risk Heatmap API",
+                bossDesc: "Use PostGIS and Python to cross-reference elevation models with water flows, generating a flood risk heatmap."
             }
         ]
     }
@@ -604,11 +608,11 @@ window.toggleRoleDashboard = function(index) {
 };
 
 function customizeDashboard() {
-    const userBranch = localStorage.getItem('pathos_branch');
     const grid = document.querySelector('.stream-grid');
     const heroH1 = document.querySelector('.hero h1');
     const heroP = document.querySelector('.hero p');
     const sectTitle = document.getElementById('architectures');
+    const userBranch = localStorage.getItem('pathos_branch');
 
     // Normalize branch key (extract short code if it contains parentheses, e.g. "Computer Science (CSE)" -> "cse")
     let normalizedBranch = null;
@@ -796,6 +800,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateProfileSummary();
     initCustomCursor();
+    customizeDashboard();
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('auth_required') === 'true') {
         setTimeout(() => {
